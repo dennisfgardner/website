@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dennis Gardner - About</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        nav {
+            background-color: #34495e;
+            overflow: hidden;
+            text-align: center;
+        }
+        nav a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #1abc9c;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 80vh;
+        }
+        .profile-section {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .profile-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+            border: 5px solid #1abc9c;
+        }
+        .profile-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        .skills-container {
+            margin: 30px 0;
+        }
+        .skill-bar {
+            background-color: #ecf0f1;
+            height: 25px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .skill-level {
+            background-color: #1abc9c;
+            height: 100%;
+            border-radius: 5px;
+            color: white;
+            text-align: right;
+            padding-right: 10px;
+            line-height: 25px;
+            font-weight: bold;
+        }
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #34495e;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: #1abc9c;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::after {
+            right: -12px;
+        }
+        .right::after {
+            left: -13px;
+        }
+        .timeline-content {
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::after {
+                left: 18px;
+            }
+            .left::after, .right::after {
+                left: 18px;
+            }
+            .right {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dennis Gardner</h1>
+        <p>Web Developer | Tech Enthusiast | Adventure Seeker</p>
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    
+    <div class="container">
+        <h2>About Me</h2>
+        
+        <div class="profile-section">
+            <img src="/api/placeholder/400/400" alt="Dennis Gardner" class="profile-img">
+            <div class="profile-text">
+                <p>Hello! I'm Dennis Gardner, a senior web developer with over 10 years of experience creating responsive and user-friendly websites. Based in Seattle, Washington, I specialize in frontend development with a focus on creating accessible and performant web applications.</p>
+                <p>When I'm not coding, you can find me hiking in the Cascade Mountains, experimenting with new recipes in my kitchen, or volunteering at local tech meetups to help aspiring developers find their path in the industry.</p>
+                <p>I believe in continuous learning and staying updated with the latest technologies and best practices in web development. This mindset has allowed me to adapt and thrive in the ever-evolving tech landscape.</p>
+            </div>
+        </div>
+        
+        <div class="skills-container">
+            <h2>Skills</h2>
+            
+            <h3>HTML5 & CSS3</h3>
+            <div class="skill-bar">
+                <div class="skill-level" style="width: 95%;">95%</div>
+            </div>
+            
+            <h3>JavaScript</h3>
+            <div class="skill-bar">
+                <div class="skill-level" style="width: 90%;">90%</div>
+            </div>
+            
+            <h3>React</h3>
+            <div class="skill-bar">
+                <div class="skill-level" style="width: 85%;">85%</div>
+            </div>
+            
+            <h3>Node.js</h3>
+            <div class="skill-bar">
+                <div class="skill-level" style="width: 80%;">80%</div>
+            </div>
+            
+            <h3>UI/UX Design</h3>
+            <div class="skill-bar">
+                <div class="skill-level" style="width: 75%;">75%</div>
+            </div>
+        </div>
+        
+        <h2>Professional Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>2023 - Present</h3>
+                    <h4>Senior Frontend Developer</h4>
+                    <p>TechSolutions Inc., Seattle</p>
+                    <p>Leading a team of developers in creating enterprise-level web applications with modern JavaScript frameworks.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>2020 - 2023</h3>
+                    <h4>Web Developer</h4>
+                    <p>Innovative Digital, Portland</p>
+                    <p>Developed responsive websites for clients across various industries, focusing on performance optimization and accessibility.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>2017 - 2020</h3>
+                    <h4>Junior Developer</h4>
+                    <p>WebCraft Studios, San Francisco</p>
+                    <p>Collaborated with designers and senior developers to implement frontend solutions for e-commerce platforms.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>2015 - 2017</h3>
+                    <h4>Computer Science Degree</h4>
+                    <p>University of Washington</p>
+                    <p>Graduated with honors, specializing in web technologies and software engineering.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Dennis Gardner. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

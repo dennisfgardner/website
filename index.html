@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dennis Gardner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        nav {
+            background-color: #34495e;
+            overflow: hidden;
+            text-align: center;
+        }
+        nav a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #1abc9c;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 80vh;
+        }
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+            border: 5px solid #1abc9c;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .featured-blog {
+            background-color: #ecf0f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .blog-preview {
+            margin-bottom: 20px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dennis Gardner</h1>
+        <p>Web Developer | Tech Enthusiast | Adventure Seeker</p>
+    </header>
+    
+    <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    
+    <div class="container">
+        <div class="intro">
+            <img src="/api/placeholder/400/400" alt="Dennis Gardner" class="profile-img">
+            <h2>Welcome to My Website</h2>
+            <p>Hello! I'm Dennis Gardner, a passionate web developer with a love for creating beautiful and functional websites. This is my personal space where I share my thoughts, experiences, and projects.</p>
+        </div>
+        
+        <div class="featured-blog">
+            <h2>Featured Blog Post</h2>
+            <div class="blog-preview">
+                <h3>The Future of Web Development in 2025</h3>
+                <p>As we navigate through 2025, the landscape of web development continues to evolve at an unprecedented pace. From AI-powered design tools to innovative frontend frameworks, the industry is experiencing a renaissance of creativity and efficiency...</p>
+                <a href="blog.html#post1">Read More &rarr;</a>
+            </div>
+        </div>
+        
+        <div class="recent-posts">
+            <h2>Recent Posts</h2>
+            <div class="blog-preview">
+                <h3>My Journey Through the Rocky Mountains</h3>
+                <p>Last month, I embarked on an unforgettable adventure through the majestic Rocky Mountains. The breathtaking landscapes and serene wilderness taught me valuable lessons about perseverance and appreciation for nature's wonders...</p>
+                <a href="blog.html#post2">Read More &rarr;</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Dennis Gardner. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

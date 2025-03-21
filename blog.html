@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dennis Gardner - Blog</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        nav {
+            background-color: #34495e;
+            overflow: hidden;
+            text-align: center;
+        }
+        nav a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #1abc9c;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 80vh;
+        }
+        .blog-post {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .blog-header {
+            margin-bottom: 20px;
+        }
+        .blog-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .blog-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .blog-content {
+            margin-top: 20px;
+        }
+        .tags {
+            margin-top: 15px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            color: #2c3e50;
+        }
+        .comments-section {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .comment {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .comment-date {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        blockquote {
+            border-left: 5px solid #1abc9c;
+            padding-left: 20px;
+            margin-left: 0;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        code {
+            background-color: #f9f9f9;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dennis Gardner</h1>
+        <p>Web Developer | Tech Enthusiast | Adventure Seeker</p>
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    
+    <div class="container">
+        <h2>My Blog</h2>
+        <p>Welcome to my blog where I share my thoughts on web development, outdoor adventures, and everything in between.</p>
+        
+        <article id="post1" class="blog-post">
+            <div class="blog-header">
+                <h2>The Future of Web Development in 2025</h2>
+                <span class="blog-date">March 15, 2025</span>
+            </div>
+            
+            <img src="/api/placeholder/800/400" alt="Futuristic web development concept" class="blog-image">
+            
+            <div class="blog-content">
+                <p>As we navigate through 2025, the landscape of web development continues to evolve at an unprecedented pace. From AI-powered design tools to innovative frontend frameworks, the industry is experiencing a renaissance of creativity and efficiency.</p>
+                
+                <h3>AI-Driven Development</h3>
+                <p>Perhaps the most significant shift we're witnessing is the integration of artificial intelligence into the development workflow. Tools that can generate code based on natural language prompts have become sophisticated enough to handle complex tasks that would have taken hours to code manually just a few years ago.</p>
+                
+                <blockquote>The rise of AI assistants has not replaced developers but has transformed our role from coding every line to becoming architects who guide these intelligent systems toward creating elegant solutions.</blockquote>
+                
+                <p>These AI partners are particularly revolutionary for prototyping, allowing developers to iterate through ideas at lightning speed. The most exciting aspect is how they're democratizing web development, making it accessible to those without traditional coding backgrounds.</p>
+                
+                <h3>WebAssembly Dominance</h3>
+                <p>WebAssembly (Wasm) has finally reached the tipping point where it's becoming standard in production environments. The ability to run near-native performance code in the browser has opened doors to applications that were previously unimaginable in a web context.</p>
+                
+                <p>Complex 3D visualizations, real-time video processing, and intensive computational tasks now run smoothly in browsers across all devices. The ecosystem around Wasm has matured, with libraries and frameworks that make it accessible without needing to understand the lower-level details.</p>
+                
+                <h3>Micro-Frontends Going Mainstream</h3>
+                <p>The micro-frontend architecture has graduated from experimental to essential for large-scale applications. Breaking down monolithic frontends into independently deployable components has proven to be a game-changer for teams working on enterprise applications.</p>
+                
+                <p>The tooling has caught up as well, with sophisticated orchestration layers that handle cross-fragment communication and state management. What's particularly impressive is how seamless the developer experience has become, with unified testing and deployment pipelines that hide much of the complexity.</p>
+                
+                <h3>Privacy-First Development</h3>
+                <p>With global privacy regulations tightening and users becoming increasingly aware of data practices, privacy-first development has moved from a nice-to-have to a fundamental requirement. The most successful applications are those that have embraced this shift wholeheartedly.</p>
+                
+                <p>Techniques like edge computing for localized data processing, zero-knowledge proofs for authentication, and client-side encryption are becoming standard patterns. What's fascinating is that these approaches often lead to better performance and user experiences when implemented thoughtfully.</p>
+                
+                <h3>Looking Ahead</h3>
+                <p>As we look toward the latter half of 2025 and beyond, the integration of these trends will likely accelerate. The most successful developers will be those who can orchestrate these technologies to create experiences that are not just functional but delightful.</p>
+                
+                <p>The future of web development isn't just about what's technically possible but about creating meaningful connections between humans and technology. In my next post, I'll explore specific examples of applications that are leading this charge.</p>
+            </div>
+            
+            <div class="tags">
+                <span class="tag">Web Development</span>
+                <span class="tag">AI</span>
+                <span class="tag">WebAssembly</span>
+                <span class="tag">Future Tech</span>
+            </div>
+            
+            <div class="comments-section">
+                <h3>Comments (2)</h3>
+                
+                <div class="comment">
+                    <p><span class="comment-author">Alex Johnson</span> <span class="comment-date">March 15, 2025</span></p>
+                    <p>Great insights, Dennis! I've been experimenting with some AI coding assistants and they've transformed my workflow. I'm curious about your thoughts on the ethical implications of these tools, especially regarding job displacement.</p>
+                </div>
+                
+                <div class="comment">
+                    <p><span class="comment-author">Sarah Chen</span> <span class="comment-date">March 16, 2025</span></p>
+                    <p>The micro-frontend architecture point resonated with me. We've recently transitioned our platform to this approach and while the initial setup was challenging, the long-term benefits for our team have been substantial. Would love to see a deeper dive on this topic!</p>
+                </div>
+            </div>
+        </article>
+        
+        <article id="post2" class="blog-post">
+            <div class="blog-header">
+                <h2>My Journey Through the Rocky Mountains</h2>
+                <span class="blog-date">February 28, 2025</span>
+            </div>
+            
+            <img src="/api/placeholder/800/400" alt="Rocky Mountains landscape" class="blog-image">
+            
+            <div class="blog-content">
+                <p>Last month, I embarked on an unforgettable adventure through the majestic Rocky Mountains. The breathtaking landscapes and serene wilderness taught me valuable lessons about perseverance and appreciation for nature's wonders.</p>
+                
+                <h3>The Decision to Disconnect</h3>
+                <p>As someone who spends most days immersed in code and digital interfaces, I felt a growing need to disconnect completely. The Rocky Mountains had been calling to me for years – their imposing peaks and vast wilderness promising the perfect antidote to screen fatigue and the constant connectivity of modern life.</p>
+                
+                <p>With minimal planning but maximum enthusiasm, I packed my hiking gear, left my laptop behind (a rare occurrence!), and set off on a two-week journey that would challenge me physically and mentally while rewarding me with experiences I'll treasure forever.</p>
+                
+                <h3>Day One: Humility at Altitude</h3>
+                <p>My journey began at the Rocky Mountain National Park in Colorado. Despite considering myself reasonably fit from regular gym sessions and weekend hikes around Seattle, the altitude quickly humbled me. At over 9,000 feet, even the "easy" trails left me breathless, forcing a pace much slower than my usual impatient stride.</p>
+                
+                <blockquote>There's something profoundly grounding about being reminded of your limitations by a mountain that has stood for millions of years. Technology may advance exponentially, but some things remain constant – including the thin air at elevation.</blockquote>
+                
+                <p>This initial struggle became metaphorical – in web development, we often race to implement the newest framework or technique, when sometimes slowing down and mastering fundamentals yields better results. The mountains were already teaching me lessons I could apply to my work.</p>
+                
+                <h3>Finding My Rhythm</h3>
+                <p>By the fourth day, my body began adapting to the altitude, and I settled into a comfortable hiking rhythm. I followed a trail that wound through ancient forests before opening to reveal an alpine lake so vibrantly blue it seemed artificially enhanced – except there was no filter, no screen, just nature's incredible palette.</p>
+                
+                <p>As I sat by the lake eating my simple lunch, I noticed how time seemed to expand. Without notifications and meetings segmenting my day, hours stretched luxuriously. My mind, initially restless and seeking stimulation, gradually settled into the present moment.</p>
+                
+                <h3>The Unexpected Encounter</h3>
+                <p>On day seven, while traversing a particularly remote section of trail, I encountered a fellow hiker in distress. David, an experienced mountaineer from Australia, had twisted his ankle badly on a loose rock. He could walk, but painfully and slowly.</p>
+                
+                <p>Being six miles from the nearest ranger station, we formed an impromptu team. I shared my trekking poles to ease his journey, while he shared his extensive knowledge of the local geology, pointing out rock formations that told the story of the mountains' formation over millions of years.</p>
+                
+                <p>What could have been a simple detour became one of the most engaging parts of my trip. David's perspective – seeing these mountains for the first time with the trained eye of someone who had hiked across five continents – gave me a fresh appreciation for terrain I had already begun taking for granted.</p>
+                
+                <h3>Lessons From the Trail</h3>
+                <p>As my journey continued, each day brought new insights that paralleled my experiences as a developer:</p>
+                
+                <p>The importance of preparation: Just as I wouldn't deploy code without testing, I learned not to start a trail without proper water and navigation tools.</p>
+                
+                <p>Adaptability: Weather in the mountains changes instantly, requiring quick decisions and route adjustments – not unlike responding to sudden client requirement changes.</p>
+                
+                <p>Community matters: The trail community, where hikers share information and support, reminded me of the importance of the developer community for growth and problem-solving.</p>
+                
+                <h3>Returning With New Perspective</h3>
+                <p>When I finally returned to Seattle and reluctantly powered on my devices, I expected to feel overwhelmed by the influx of information. Instead, I found myself approaching my projects with renewed clarity and purpose.</p>
+                
+                <p>The mountains had reset something fundamental in my approach to work and life. Problems that seemed insurmountable before now appeared as challenges to be broken down and tackled step by step – just like ascending a difficult peak.</p>
+                
+                <p>I've since incorporated mini-disconnects into my routine, finding that even short periods away from technology fuel creativity and problem-solving when I return. While not everyone can take two weeks in the Rockies, I believe all developers could benefit from regular returns to nature's development environment – where the only code is the one written into the incredible systems that surround us.</p>
+            </div>
+            
+            <div class="tags">
+                <span class="tag">Personal</span>
+                <span class="tag">Hiking</span>
+                <span class="tag">Rocky Mountains</span>
+                <span class="tag">Adventure</span>
+            </div>
+            
+            <div class="comments-section">
+                <h3>Comments (3)</h3>
+                
+                <div class="comment">
+                    <p><span class="comment-author">Michael Wong</span> <span class="comment-date">February 28, 2025</span></p>
+                    <p>This resonates deeply with me. I did a similar trip last summer and came back with a completely different perspective on my work-life balance. Those mountains have wisdom to share if we're willing to listen!</p>
+                </div>
+                
+                <div class="comment">
+                    <p><span class="comment-author">Emma Davis</span> <span class="comment-date">March 1, 2025</span></p>
+                    <p>Beautiful writing, Dennis! I'm curious - what trails would you recommend for a beginner who wants to experience the Rockies without the technical challenges?</p>
+                </div>
+                
+                <div class="comment">
+                    <p><span class="comment-author">James Wilson</span> <span class="comment-date">March 3, 2025</span></p>
+                    <p>The parallel between hiking and development is spot on. I've found that some of my best coding solutions have come to me while on trails, away from screens. There's something about the rhythmic movement that gets creative juices flowing.</p>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Dennis Gardner. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
