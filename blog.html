@@ -7,146 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            background: #ffffff;
-            color: #111827;
-        }
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            height: 64px;
-        }
-        .nav-brand {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #111827;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .nav-links { display: flex; gap: 0.25rem; }
-        .nav-links a {
-            color: #374151;
-            text-decoration: none;
-            padding: 0.4rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.15s, color 0.15s;
-        }
-        .nav-links a:hover,
-        .nav-links a.active { background: #f3f4f6; color: #0ea5e9; }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem 4rem;
-        }
-        h2 {
-            font-size: 1.375rem;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 1.5rem 0;
-            padding-bottom: 0.4rem;
-            border-bottom: 2px solid #0ea5e9;
-            display: inline-block;
-        }
-        h3 { color: #1f2937; margin: 0 0 0.25rem; }
-        a { color: #0ea5e9; }
-        a:hover { text-decoration: underline; }
-        footer {
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
-            text-align: center;
-            padding: 1.5rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-top: 2rem;
-        }
-        footer p { margin: 0; }
-        /* Blog-specific */
-        .blog-post {
-            margin-bottom: 3rem;
-            padding-bottom: 3rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .blog-post:last-child { border-bottom: none; }
-        .blog-header { margin-bottom: 1rem; }
-        .blog-header h2 {
-            font-size: 1.5rem;
-            border: none;
-            padding: 0;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-        .blog-date { color: #6b7280; font-size: 0.875rem; }
-        .blog-content { margin-top: 1.25rem; color: #374151; }
-        .blog-content h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; color: #111827; }
-        .blog-content p { margin: 0 0 1rem; }
-        .tags { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .tag {
-            display: inline-block;
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #0c4a6e;
-        }
-        .comments-section {
-            margin-top: 1.5rem;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            padding: 1.25rem 1.5rem;
-            border-radius: 8px;
-        }
-        .comments-section h3 { font-size: 0.95rem; color: #374151; margin-bottom: 1rem; }
-        .comment {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .comment:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .comment-author { font-weight: 600; color: #111827; }
-        .comment-date { color: #6b7280; font-size: 0.8rem; margin-left: 0.5rem; }
-        .comment p { margin: 0.25rem 0 0; font-size: 0.9rem; color: #374151; }
-        blockquote {
-            border-left: 3px solid #0ea5e9;
-            padding-left: 1.25rem;
-            margin: 1rem 0;
-            color: #6b7280;
-            font-style: italic;
-        }
-        code {
-            background: #f3f4f6;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        @media (max-width: 600px) {
-            nav {
-                height: auto;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0.75rem 1rem;
-                gap: 0.5rem;
-            }
-            .nav-links { flex-wrap: wrap; gap: 0 0.1rem; }
-            .container { padding: 1.5rem 1rem 3rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <nav>
@@ -159,10 +20,9 @@
             <a href="contact.html">Contact</a>
         </div>
     </nav>
-
     <div class="container">
         <h2>Blog</h2>
-        <p style="color:#6b7280;margin-top:-1rem;margin-bottom:2rem;font-size:0.95rem;">Thoughts on physics, AI, and systems engineering.</p>
+        <p class="blog-intro">Thoughts on physics, AI, and systems engineering.</p>
 
         <article id="post1" class="blog-post">
             <div class="blog-header">
@@ -252,7 +112,6 @@
             </div>
         </article>
     </div>
-
     <footer>
         <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
     </footer>

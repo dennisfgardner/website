@@ -7,6 +7,8 @@ import shutil
 import subprocess
 import sys
 
+import blog_posts
+
 CV_PATH = "CV_ver18_20260706.tex"
 
 # Headshot: source photo (drop in a new one to replace) and the web-sized copy
@@ -224,14 +226,31 @@ def parse_enumerate(raw, pub_mode=False):
 # Shared HTML pieces
 # ---------------------------------------------------------------------------
 
-NAV = '''    <nav>
+# All site styling lives in styles.css (the single source of truth). The pages
+# link it rather than carrying inline CSS — see styles.css to change any style.
+STYLESHEET = "styles.css"
+
+# The nav links, in order. Each is (href, label, active_key); the active page's
+# link gets class="active" so it highlights site-wide.
+NAV_LINKS = [
+    ('index.html', 'Home', 'home'),
+    ('about.html', 'About', 'about'),
+    ('publications.html', 'Publications', 'publications'),
+    ('blog.html', 'Blog', 'blog'),
+    ('contact.html', 'Contact', 'contact'),
+]
+
+def nav(active=None):
+    """Return the shared <nav>, marking the link whose key == active."""
+    link_lines = []
+    for href, label, key in NAV_LINKS:
+        cls = ' class="active"' if key == active else ''
+        link_lines.append(f'            <a href="{href}"{cls}>{label}</a>')
+    links = '\n'.join(link_lines)
+    return f'''    <nav>
         <a href="index.html" class="nav-brand">Dennis F. Gardner Jr., Ph.D.</a>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="publications.html">Publications</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html">Contact</a>
+{links}
         </div>
     </nav>'''
 
@@ -239,85 +258,7 @@ FOOTER = '''    <footer>
         <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
     </footer>'''
 
-BASE_CSS = '''        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            background: #ffffff;
-            color: #111827;
-        }
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            height: 64px;
-        }
-        .nav-brand {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #111827;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .nav-links { display: flex; gap: 0.25rem; }
-        .nav-links a {
-            color: #374151;
-            text-decoration: none;
-            padding: 0.4rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.15s, color 0.15s;
-        }
-        .nav-links a:hover { background: #f3f4f6; color: #0ea5e9; }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem 4rem;
-        }
-        h2 {
-            font-size: 1.375rem;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 1.5rem 0;
-            padding-bottom: 0.4rem;
-            border-bottom: 2px solid #0ea5e9;
-            display: inline-block;
-        }
-        h3 { color: #1f2937; margin: 0 0 0.25rem; }
-        a { color: #0ea5e9; }
-        a:hover { text-decoration: underline; }
-        footer {
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
-            text-align: center;
-            padding: 1.5rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-top: 2rem;
-        }
-        footer p { margin: 0; }
-        @media (max-width: 600px) {
-            nav {
-                height: auto;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0.75rem 1rem;
-                gap: 0.5rem;
-            }
-            .nav-links { flex-wrap: wrap; gap: 0 0.1rem; }
-            .container { padding: 1.5rem 1rem 3rem; }
-        }'''
-
-def page(title, extra_css, nav, body, footer):
+def page(title, active, body):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -327,15 +268,12 @@ def page(title, extra_css, nav, body, footer):
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-{BASE_CSS}
-{extra_css}
-    </style>
+    <link rel="stylesheet" href="{STYLESHEET}">
 </head>
 <body>
-{nav}
+{nav(active)}
 {body}
-{footer}
+{FOOTER}
 </body>
 </html>'''
 
@@ -372,74 +310,7 @@ def render_index(data):
         </div>
     </div>'''
 
-    css = '''        .intro {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            padding: 3rem 0 2.5rem;
-        }
-        .intro-text { flex: 1; }
-        .tagline {
-            color: #6b7280;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin: 0 0 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-        }
-        .hero-name {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 1rem;
-            border: none;
-            display: block;
-            padding: 0;
-        }
-        .hero-summary {
-            color: #374151;
-            font-size: 1rem;
-            margin: 0 0 1.5rem;
-            line-height: 1.7;
-        }
-        .headshot {
-            width: 190px;
-            height: 190px;
-            border-radius: 50%;
-            object-fit: cover;
-            object-position: center 20%;
-            flex-shrink: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        .cta-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-        .cta-btn {
-            display: inline-block;
-            padding: 0.6rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.15s;
-        }
-        .cta-btn-primary { background: #0ea5e9; color: white; }
-        .cta-btn-primary:hover { background: #0284c7; text-decoration: none; color: white; }
-        .cta-btn-secondary { background: #f3f4f6; color: #374151; }
-        .cta-btn-secondary:hover { background: #e5e7eb; text-decoration: none; color: #111827; }
-        .links-section ul { list-style: none; padding: 0; }
-        .links-section li {
-            padding: 0.875rem 0;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 0.95rem;
-            color: #374151;
-        }
-        .links-section li:last-child { border-bottom: none; }
-        @media (max-width: 600px) {
-            .intro { flex-direction: column-reverse; gap: 1.5rem; padding: 2rem 0 1.5rem; }
-            .headshot { width: 140px; height: 140px; }
-            .hero-name { font-size: 1.75rem; }
-        }'''
-
-    return page('Dennis F. Gardner Jr., Ph.D.', css, NAV, body, FOOTER)
+    return page('Dennis F. Gardner Jr., Ph.D.', 'home', body)
 
 # ---------------------------------------------------------------------------
 # render_about
@@ -520,75 +391,7 @@ def render_about(data):
         </section>
     </div>'''
 
-    css = '''        section { margin-bottom: 3rem; }
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem; }
-        .skill-badge {
-            background: #f0f9ff;
-            border-left: 3px solid #0ea5e9;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            color: #0c4a6e;
-        }
-        .timeline { display: flex; flex-direction: column; gap: 1rem; }
-        .timeline-item {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .timeline-item:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
-        .timeline-date {
-            font-size: 0.8rem;
-            color: #6b7280;
-            font-style: italic;
-            white-space: nowrap;
-            flex-shrink: 0;
-            margin-top: 0.2rem;
-        }
-        .timeline-item h3 { font-size: 1rem; }
-        .dept { color: #6b7280; font-style: italic; font-size: 0.9rem; margin-top: 0.2rem; }
-        .timeline-item ul { margin: 0; padding-left: 1.25rem; }
-        .timeline-item li { margin-bottom: 0.3rem; font-size: 0.93rem; color: #374151; }
-        .edu-list { display: flex; flex-direction: column; gap: 1rem; }
-        .edu-item { display: grid; grid-template-columns: 130px 1fr; gap: 1rem; align-items: start; }
-        .edu-date { color: #6b7280; font-style: italic; font-size: 0.875rem; text-align: right; padding-top: 2px; }
-        .edu-note { font-style: italic; color: #6b7280; font-size: 0.875rem; margin-top: 0.25rem; }
-        .awards-list {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 16px;
-        }
-        .awards-list li {
-            padding: 6px 10px;
-            background: #f0f9ff;
-            border-left: 3px solid #0ea5e9;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            color: #0c4a6e;
-        }
-        @media (max-width: 700px) {
-            .timeline-header { flex-direction: column; gap: 0.25rem; }
-            .edu-item { grid-template-columns: 1fr; }
-            .edu-date { text-align: left; }
-            .awards-list { grid-template-columns: 1fr; }
-        }'''
-
-    return page('About – Dennis F. Gardner Jr.', css, NAV, body, FOOTER)
+    return page('About – Dennis F. Gardner Jr.', 'about', body)
 
 # ---------------------------------------------------------------------------
 # render_contact
@@ -626,24 +429,7 @@ def render_contact(data):
         </div>
     </div>'''
 
-    css = '''        section { margin-bottom: 2rem; }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        .contact-item {
-            background: #f0f9ff;
-            border: 1px solid #e0f2fe;
-            border-left: 4px solid #0ea5e9;
-            padding: 1.25rem 1.5rem;
-            border-radius: 8px;
-        }
-        .contact-item h3 { margin: 0 0 0.5rem; color: #0c4a6e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; }
-        .contact-item p { margin: 0; font-size: 0.95rem; }
-        @media (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }'''
-
-    return page('Contact – Dennis F. Gardner Jr.', css, NAV, body, FOOTER)
+    return page('Contact – Dennis F. Gardner Jr.', 'contact', body)
 
 # ---------------------------------------------------------------------------
 # render_publications
@@ -693,35 +479,56 @@ def render_publications(data):
         </section>
     </div>'''
 
-    css = '''        section { margin-bottom: 3rem; }
-        .pub-stats {
-            background: #f0f9ff;
-            color: #0c4a6e;
-            border: 1px solid #bae6fd;
-            text-align: center;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        .pub-list { padding-left: 1.75rem; }
-        .pub-list li {
-            margin-bottom: 1.125rem;
-            padding-bottom: 1.125rem;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 0.93rem;
-            line-height: 1.6;
-        }
-        .pub-list li:last-child { border-bottom: none; }
-        .pub-note {
-            color: #0ea5e9;
-            font-style: italic;
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }'''
+    return page('Publications – Dennis F. Gardner Jr.', 'publications', body)
 
-    return page('Publications – Dennis F. Gardner Jr.', css, NAV, body, FOOTER)
+# ---------------------------------------------------------------------------
+# render_blog
+# ---------------------------------------------------------------------------
+
+def render_blog(posts):
+    articles = []
+    for post in posts:
+        tags_html = '\n'.join(
+            f'                <span class="tag">{t}</span>' for t in post['tags'])
+
+        comments = post.get('comments', [])
+        comment_items = '\n'.join(
+            f'''                <div class="comment">
+                    <p><span class="comment-author">{c["author"]}</span><span class="comment-date">{c["date"]}</span></p>
+                    <p>{c["text"]}</p>
+                </div>''' for c in comments)
+        comments_html = f'''
+            <div class="comments-section">
+                <h3>Comments ({len(comments)})</h3>
+{comment_items}
+            </div>''' if comments else ''
+
+        articles.append(f'''        <article id="{post['id']}" class="blog-post">
+            <div class="blog-header">
+                <h2>{post['title']}</h2>
+                <span class="blog-date">{post['date']}</span>
+            </div>
+
+            <div class="blog-content">
+{post['content']}
+            </div>
+
+            <div class="tags">
+{tags_html}
+            </div>
+{comments_html}
+        </article>''')
+
+    articles_html = '\n\n'.join(articles)
+
+    body = f'''    <div class="container">
+        <h2>Blog</h2>
+        <p class="blog-intro">Thoughts on physics, AI, and systems engineering.</p>
+
+{articles_html}
+    </div>'''
+
+    return page('Blog – Dennis F. Gardner Jr.', 'blog', body)
 
 # ---------------------------------------------------------------------------
 # Headshot
@@ -784,6 +591,7 @@ def main():
         'about.html':        render_about(data),
         'contact.html':      render_contact(data),
         'publications.html': render_publications(data),
+        'blog.html':         render_blog(blog_posts.POSTS),
     }
 
     for fname, html in files.items():
