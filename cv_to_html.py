@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 """Parse CV_ver18_20260706.tex and generate website HTML pages."""
 
+import os
 import re
+import shutil
+import subprocess
 import sys
 
 CV_PATH = "CV_ver18_20260706.tex"
+
+# Headshot: source photo (drop in a new one to replace) and the web-sized copy
+# that index.html references. The web copy is regenerated on each run.
+HEADSHOT_SRC = "headshot.jpeg"
+HEADSHOT_WEB = "headshot_web.jpg"
+HEADSHOT_MAX_PX = 600  # longest edge of the web copy
 
 # ---------------------------------------------------------------------------
 # LaTeX cleaning helpers
@@ -307,8 +316,12 @@ def render_index(data):
 
     body = f'''    <div class="container">
         <div class="intro">
-            <h2>Welcome</h2>
-            <p>{first_two}</p>
+            <div class="intro-text">
+                <h2>Welcome</h2>
+                <p>{first_two}</p>
+            </div>
+            <img class="headshot" src="headshot_web.jpg"
+                 alt="Portrait of Dennis F. Gardner Jr.">
         </div>
         <div class="links-section">
             <h2>Explore</h2>
@@ -320,9 +333,28 @@ def render_index(data):
         </div>
     </div>'''
 
-    css = '''        .intro { margin-bottom: 30px; }
+    css = '''        .intro {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .intro-text { flex: 1; }
+        .headshot {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 20%;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
         .links-section ul { list-style: none; padding: 0; }
-        .links-section li { padding: 10px 0; border-bottom: 1px solid #ecf0f1; font-size: 1.05em; }'''
+        .links-section li { padding: 10px 0; border-bottom: 1px solid #ecf0f1; font-size: 1.05em; }
+        @media (max-width: 600px) {
+            .intro { flex-direction: column-reverse; text-align: center; }
+            .intro-text { text-align: left; }
+        }'''
 
     return page('Dennis F. Gardner Jr., Ph.D.', css, NAV, body, FOOTER)
 
@@ -592,6 +624,33 @@ def render_publications(data):
     return page('Publications – Dennis F. Gardner Jr.', css, NAV, body, FOOTER)
 
 # ---------------------------------------------------------------------------
+# Headshot
+# ---------------------------------------------------------------------------
+
+def generate_headshot():
+    """Regenerate the web-sized headshot from HEADSHOT_SRC using macOS `sips`.
+
+    Skips gracefully (with a note) if the source photo or `sips` is missing, so
+    the page generation itself never fails on account of the image.
+    """
+    if not os.path.exists(HEADSHOT_SRC):
+        print(f"Note: {HEADSHOT_SRC} not found — skipping headshot resize "
+              f"(index.html still expects {HEADSHOT_WEB}).")
+        return
+    if shutil.which("sips") is None:
+        print("Note: `sips` not available (macOS only) — skipping headshot resize. "
+              f"Resize {HEADSHOT_SRC} to {HEADSHOT_MAX_PX}px manually and save as {HEADSHOT_WEB}.")
+        return
+
+    result = subprocess.run(
+        ["sips", "-Z", str(HEADSHOT_MAX_PX), HEADSHOT_SRC, "--out", HEADSHOT_WEB],
+        capture_output=True, text=True)
+    if result.returncode == 0:
+        print(f"Wrote {HEADSHOT_WEB} (resized from {HEADSHOT_SRC}, max {HEADSHOT_MAX_PX}px)")
+    else:
+        print(f"Warning: sips failed to resize {HEADSHOT_SRC}: {result.stderr.strip()}")
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -631,6 +690,8 @@ def main():
         with open(fname, 'w', encoding='utf-8') as f:
             f.write(html)
         print(f"Wrote {fname}")
+
+    generate_headshot()
 
     # Sanity checks
     exp_count = len(data['experience'])

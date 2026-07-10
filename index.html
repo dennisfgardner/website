@@ -52,9 +52,28 @@
         h3 { color: #2c3e50; }
         a { color: #1abc9c; text-decoration: none; }
         a:hover { text-decoration: underline; }
-        .intro { margin-bottom: 30px; }
+        .intro {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .intro-text { flex: 1; }
+        .headshot {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 20%;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
         .links-section ul { list-style: none; padding: 0; }
         .links-section li { padding: 10px 0; border-bottom: 1px solid #ecf0f1; font-size: 1.05em; }
+        @media (max-width: 600px) {
+            .intro { flex-direction: column-reverse; text-align: center; }
+            .intro-text { text-align: left; }
+        }
     </style>
 </head>
 <body>
@@ -70,10 +89,14 @@
     </nav>
     <div class="container">
         <div class="intro">
-            <h2>Welcome</h2>
-            <p>Physicist and systems engineer with 10+ years advancing sensing, imaging, and autonomous systems for national security missions.
+            <div class="intro-text">
+                <h2>Welcome</h2>
+                <p>Physicist and systems engineer with 10+ years advancing sensing, imaging, and autonomous systems for national security missions.
 Equally effective in the lab and in the boardroom—from hands-on experimentation and systems architecture to program leadership and executive briefings.
 Recognized for tackling ambiguous, cross-disciplinary hardware/software problems and translating complex technical work into mission impact and business growth..</p>
+            </div>
+            <img class="headshot" src="headshot_web.jpg"
+                 alt="Portrait of Dennis F. Gardner Jr.">
         </div>
         <div class="links-section">
             <h2>Explore</h2>

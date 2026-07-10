@@ -30,6 +30,10 @@ The script uses only the Python standard library. It parses LaTeX sections delim
 
 If the CV file is renamed or a new version is used, update `CV_PATH` at the top of `cv_to_html.py`.
 
+## Updating the homepage headshot
+
+`index.html` shows a circular headshot in the Welcome section. It references `headshot_web.jpg`, a web-sized copy that `cv_to_html.py` regenerates from `headshot.jpeg` on every run (via `generate_headshot()`, using the macOS `sips` tool, longest edge `HEADSHOT_MAX_PX` = 600 px). To replace the photo, drop a new `headshot.jpeg` in the repo root and run `python3 cv_to_html.py` — the resize happens automatically. If `sips` or the source photo is missing, the resize is skipped with a note and page generation still succeeds.
+
 ## Development
 
 Open any `.html` file directly in a browser, or serve locally:
