@@ -225,63 +225,97 @@ def parse_enumerate(raw, pub_mode=False):
 # ---------------------------------------------------------------------------
 
 NAV = '''    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="publications.html">Publications</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html" class="nav-brand">Dennis F. Gardner Jr., Ph.D.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="publications.html">Publications</a>
+            <a href="blog.html">Blog</a>
+            <a href="contact.html">Contact</a>
+        </div>
     </nav>'''
 
 FOOTER = '''    <footer>
-        <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D. All Rights Reserved.</p>
+        <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
     </footer>'''
 
-BASE_CSS = '''        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+BASE_CSS = '''        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
+            background: #ffffff;
+            color: #111827;
         }
-        header {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-        }
-        header h1 { color: white; margin: 0; }
-        header p { margin: 0.25rem 0 0; opacity: 0.85; }
         nav {
-            background-color: #34495e;
-            overflow: hidden;
-            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 64px;
         }
-        nav a {
-            display: inline-block;
-            color: white;
-            padding: 14px 16px;
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #111827;
             text-decoration: none;
-            transition: background-color 0.3s;
+            white-space: nowrap;
         }
-        nav a:hover { background-color: #1abc9c; }
+        .nav-links { display: flex; gap: 0.25rem; }
+        .nav-links a {
+            color: #374151;
+            text-decoration: none;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.15s, color 0.15s;
+        }
+        .nav-links a:hover { background: #f3f4f6; color: #0ea5e9; }
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px 30px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-height: 80vh;
+            padding: 2.5rem 1.5rem 4rem;
         }
+        h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #0ea5e9;
+            display: inline-block;
+        }
+        h3 { color: #1f2937; margin: 0 0 0.25rem; }
+        a { color: #0ea5e9; }
+        a:hover { text-decoration: underline; }
         footer {
-            background-color: #2c3e50;
-            color: white;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
             text-align: center;
-            padding: 1rem 0;
+            padding: 1.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 2rem;
         }
-        h2 { color: #2c3e50; border-bottom: 2px solid #1abc9c; padding-bottom: 6px; }
-        h3 { color: #2c3e50; }
-        a { color: #1abc9c; text-decoration: none; }
-        a:hover { text-decoration: underline; }'''
+        footer p { margin: 0; }
+        @media (max-width: 600px) {
+            nav {
+                height: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
+            }
+            .nav-links { flex-wrap: wrap; gap: 0 0.1rem; }
+            .container { padding: 1.5rem 1rem 3rem; }
+        }'''
 
 def page(title, extra_css, nav, body, footer):
     return f'''<!DOCTYPE html>
@@ -290,16 +324,15 @@ def page(title, extra_css, nav, body, footer):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
 {BASE_CSS}
 {extra_css}
     </style>
 </head>
 <body>
-    <header>
-        <h1>Dennis F. Gardner Jr., Ph.D.</h1>
-        <p>Physicist &nbsp;|&nbsp; Systems Engineer &nbsp;|&nbsp; AI &amp; ML Researcher</p>
-    </header>
 {nav}
 {body}
 {footer}
@@ -317,8 +350,14 @@ def render_index(data):
     body = f'''    <div class="container">
         <div class="intro">
             <div class="intro-text">
-                <h2>Welcome</h2>
-                <p>{first_two}</p>
+                <p class="tagline">Physicist &nbsp;·&nbsp; Systems Engineer &nbsp;·&nbsp; AI &amp; ML Researcher</p>
+                <h2 class="hero-name">Hi, I&#8217;m Dennis.</h2>
+                <p class="hero-summary">{first_two}</p>
+                <div class="cta-buttons">
+                    <a class="cta-btn cta-btn-primary" href="about.html">About Me</a>
+                    <a class="cta-btn cta-btn-secondary" href="publications.html">Publications</a>
+                    <a class="cta-btn cta-btn-secondary" href="contact.html">Contact</a>
+                </div>
             </div>
             <img class="headshot" src="headshot_web.jpg"
                  alt="Portrait of Dennis F. Gardner Jr.">
@@ -336,24 +375,68 @@ def render_index(data):
     css = '''        .intro {
             display: flex;
             align-items: center;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 3rem;
+            padding: 3rem 0 2.5rem;
         }
         .intro-text { flex: 1; }
+        .tagline {
+            color: #6b7280;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0 0 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+        .hero-name {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 1rem;
+            border: none;
+            display: block;
+            padding: 0;
+        }
+        .hero-summary {
+            color: #374151;
+            font-size: 1rem;
+            margin: 0 0 1.5rem;
+            line-height: 1.7;
+        }
         .headshot {
-            width: 200px;
-            height: 200px;
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
             object-fit: cover;
             object-position: center 20%;
             flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
+        .cta-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .cta-btn {
+            display: inline-block;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .cta-btn-primary { background: #0ea5e9; color: white; }
+        .cta-btn-primary:hover { background: #0284c7; text-decoration: none; color: white; }
+        .cta-btn-secondary { background: #f3f4f6; color: #374151; }
+        .cta-btn-secondary:hover { background: #e5e7eb; text-decoration: none; color: #111827; }
         .links-section ul { list-style: none; padding: 0; }
-        .links-section li { padding: 10px 0; border-bottom: 1px solid #ecf0f1; font-size: 1.05em; }
+        .links-section li {
+            padding: 0.875rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+        .links-section li:last-child { border-bottom: none; }
         @media (max-width: 600px) {
-            .intro { flex-direction: column-reverse; text-align: center; }
-            .intro-text { text-align: left; }
+            .intro { flex-direction: column-reverse; gap: 1.5rem; padding: 2rem 0 1.5rem; }
+            .headshot { width: 140px; height: 140px; }
+            .hero-name { font-size: 1.75rem; }
         }'''
 
     return page('Dennis F. Gardner Jr., Ph.D.', css, NAV, body, FOOTER)
@@ -378,12 +461,14 @@ def render_about(data):
         bullets_html = ''.join(f'<li>{b}</li>' for b in j['bullets'])
         dept_html = f'<div class="dept">{j["dept"]}</div>' if j['dept'] else ''
         timeline_items.append(f'''            <div class="timeline-item">
-                <div class="timeline-date">{j["date"]}</div>
-                <div class="timeline-content">
-                    <h3>{j["title"]}</h3>
-                    {dept_html}
-                    <ul>{bullets_html}</ul>
+                <div class="timeline-header">
+                    <div>
+                        <h3>{j["title"]}</h3>
+                        {dept_html}
+                    </div>
+                    <span class="timeline-date">{j["date"]}</span>
                 </div>
+                <ul>{bullets_html}</ul>
             </div>''')
     timeline_html = '\n'.join(timeline_items)
 
@@ -435,56 +520,71 @@ def render_about(data):
         </section>
     </div>'''
 
-    css = '''        section { margin-bottom: 40px; }
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    css = '''        section { margin-bottom: 3rem; }
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem; }
         .skill-badge {
-            background-color: #ecf0f1;
-            border-left: 4px solid #1abc9c;
-            padding: 6px 14px;
-            border-radius: 3px;
-            font-size: 0.95em;
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #0c4a6e;
         }
-        .timeline { position: relative; padding-left: 0; }
+        .timeline { display: flex; flex-direction: column; gap: 1rem; }
         .timeline-item {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 20px;
-            margin-bottom: 28px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid #ecf0f1;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .timeline-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
         }
         .timeline-date {
-            font-size: 0.88em;
-            color: #666;
-            text-align: right;
-            padding-top: 4px;
+            font-size: 0.8rem;
+            color: #6b7280;
             font-style: italic;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
         }
-        .timeline-content h3 { margin: 0 0 4px; font-size: 1em; }
-        .dept { color: #555; font-style: italic; font-size: 0.93em; margin-bottom: 6px; }
-        .timeline-content ul { margin: 6px 0 0; padding-left: 20px; }
-        .timeline-content li { margin-bottom: 4px; font-size: 0.94em; }
-        .edu-list { display: grid; gap: 16px; }
-        .edu-item { display: grid; grid-template-columns: 120px 1fr; gap: 16px; }
-        .edu-date { color: #666; font-style: italic; font-size: 0.9em; text-align: right; padding-top: 2px; }
-        .edu-note { font-style: italic; color: #555; font-size: 0.9em; margin-top: 4px; }
+        .timeline-item h3 { font-size: 1rem; }
+        .dept { color: #6b7280; font-style: italic; font-size: 0.9rem; margin-top: 0.2rem; }
+        .timeline-item ul { margin: 0; padding-left: 1.25rem; }
+        .timeline-item li { margin-bottom: 0.3rem; font-size: 0.93rem; color: #374151; }
+        .edu-list { display: flex; flex-direction: column; gap: 1rem; }
+        .edu-item { display: grid; grid-template-columns: 130px 1fr; gap: 1rem; align-items: start; }
+        .edu-date { color: #6b7280; font-style: italic; font-size: 0.875rem; text-align: right; padding-top: 2px; }
+        .edu-note { font-style: italic; color: #6b7280; font-size: 0.875rem; margin-top: 0.25rem; }
         .awards-list {
             list-style: none;
             padding: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px 20px;
+            gap: 8px 16px;
         }
         .awards-list li {
             padding: 6px 10px;
-            background: #f9f9f9;
-            border-left: 3px solid #1abc9c;
-            font-size: 0.93em;
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #0c4a6e;
         }
         @media (max-width: 700px) {
-            .timeline-item { grid-template-columns: 1fr; }
-            .timeline-date { text-align: left; }
+            .timeline-header { flex-direction: column; gap: 0.25rem; }
             .edu-item { grid-template-columns: 1fr; }
+            .edu-date { text-align: left; }
             .awards-list { grid-template-columns: 1fr; }
         }'''
 
@@ -526,20 +626,21 @@ def render_contact(data):
         </div>
     </div>'''
 
-    css = '''        section { margin-bottom: 30px; }
+    css = '''        section { margin-bottom: 2rem; }
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 1rem;
         }
         .contact-item {
-            background: #f9f9f9;
-            border-left: 4px solid #1abc9c;
-            padding: 16px 20px;
-            border-radius: 3px;
+            background: #f0f9ff;
+            border: 1px solid #e0f2fe;
+            border-left: 4px solid #0ea5e9;
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
         }
-        .contact-item h3 { margin: 0 0 8px; color: #2c3e50; font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.05em; }
-        .contact-item p { margin: 0; }
+        .contact-item h3 { margin: 0 0 0.5rem; color: #0c4a6e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; }
+        .contact-item p { margin: 0; font-size: 0.95rem; }
         @media (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }'''
 
     return page('Contact – Dennis F. Gardner Jr.', css, NAV, body, FOOTER)
@@ -592,32 +693,31 @@ def render_publications(data):
         </section>
     </div>'''
 
-    css = '''        section { margin-bottom: 40px; }
+    css = '''        section { margin-bottom: 3rem; }
         .pub-stats {
-            background: #2c3e50;
-            color: white;
+            background: #f0f9ff;
+            color: #0c4a6e;
+            border: 1px solid #bae6fd;
             text-align: center;
-            padding: 14px;
-            border-radius: 4px;
-            margin-bottom: 30px;
-            font-size: 1.05em;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
-        .pub-list {
-            padding-left: 30px;
-            counter-reset: none;
-        }
+        .pub-list { padding-left: 1.75rem; }
         .pub-list li {
-            margin-bottom: 18px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid #ecf0f1;
-            font-size: 0.95em;
-            line-height: 1.55;
+            margin-bottom: 1.125rem;
+            padding-bottom: 1.125rem;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.93rem;
+            line-height: 1.6;
         }
         .pub-list li:last-child { border-bottom: none; }
         .pub-note {
-            color: #1abc9c;
+            color: #0ea5e9;
             font-style: italic;
-            font-size: 0.88em;
+            font-size: 0.875rem;
             margin-top: 4px;
         }'''
 
