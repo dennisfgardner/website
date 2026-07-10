@@ -1,0 +1,303 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plasmati Graduate CV
+% LaTeX Template
+% Version 1.0 (24/3/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Alessandro Plasmati (alessandro.plasmati@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Important note:
+% This template needs to be compiled with XeLaTeX.
+% The main document font is called Fontin and can be downloaded for free
+% from here: http://www.exljbris.com/fontin.html
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+% Default font size and paper size
+\documentclass[letterpaper,12pt]{article} 
+
+% For loading fonts
+\usepackage{fontspec} 
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont[SmallCapsFont = Fontin-SmallCaps.ttf, BoldFont=Fontin-Bold.ttf, ItalicFont=Fontin-Italic.ttf]{Fontin-Regular.ttf} % Main document font
+
+% Formatting packages
+\usepackage{xunicode,xltxtra,url,parskip} 
+
+% Required for specifying custom colors
+\usepackage[usenames,dvipsnames]{xcolor}
+
+% Required for adding links	and customizing them
+\usepackage{hyperref}
+\definecolor{linkcolour}{rgb}{0,0.2,0.6}
+% Set link colors throughout the document
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour}
+
+% Used to customize the \section command
+\usepackage{titlesec}
+% Text formatting of sections
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
+% Spacing around sections
+\titlespacing{\section}{0pt}{3pt}{3pt}
+
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{setspace}
+
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+\begin{document}
+
+% Removes page numbering
+\pagestyle{empty}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\par{\centering{\Huge Dennis F. \textsc{Gardner Jr.}, Ph.D.}\bigskip\par}
+
+\vspace{-0.5cm}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{c | c | c | c }
+		Vienna, VA & 970-412-4875 & \href{mailto:dennisfgardner@gmail.com}{dennisfgardner@gmail.com} & \href{https://scholar.google.com/citations?user=uYXouIIAAAAJ}{Publications \& Patents}
+	\end{tabular}
+\end{table}
+
+\section{Professional Summary}
+\vspace{0.2cm}
+
+Physicist and systems engineer with 10+ years advancing sensing, imaging, and autonomous systems for national security missions.
+Equally effective in the lab and in the boardroom---from hands-on experimentation and systems architecture to program leadership and executive briefings.
+Recognized for tackling ambiguous, cross-disciplinary hardware/software problems and translating complex technical work into mission impact and business growth.
+
+\section{Areas of Expertise}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{l | l  }
+		\checkmark Autonomous Systems & \checkmark Artificial Intelligence \& Machine Learning \\[0.2cm]
+		\checkmark Highly Performant Code  & \checkmark Cloud Computing (AWS EC2, S3, SQS) \\[0.2cm]
+		\checkmark Data Analysis \& Visualization & \checkmark Computer Vision (OpenCV)  \\[0.2cm]
+		\checkmark Software Design \& Engineering & \checkmark Computer/Device Interfacing (ROS2) \\[0.2cm]
+		\checkmark Presentations \& Public Speaking & \checkmark Scientific \& Technical Writing  \\
+	\end{tabular}
+\end{table}
+
+\section{Work Experience}
+\begin{tabular}{rp{13cm}}
+    \textsc{May 2025}--\textsc{May 2026} & Principal Scientific Director at \textsc{Ancora Collective}  \\  
+    & \emph{Scientific Consulting} \\   
+    & \footnotesize{ 
+        \begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+            \vspace{-0.2cm}
+            \item Led systems engineering and analysis for complex, multi-disciplinary technical programs, translating stakeholder requirements into system architectures and design solutions
+            \item Served as technical lead and subject-matter expert interfacing between scientific/engineering teams and non-technical stakeholders
+            \item Advised on system design trade-offs and technology strategy, integrating insights from emerging technologies into national security decision-making
+    \end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+    \textsc{Apr 2024}--\textsc{May 2025} & Solutions Lead Senior Principal at \textsc{MITRE}  \\  
+    & \emph{Systems Engineering} \\   
+    & \footnotesize{ 
+        \begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+            \vspace{-0.2cm}
+			\item Secured multi-million-dollar ONR funding by identifying a sponsor capability gap, shaping the technical solution, and leading the project through MITRE's innovation pipeline from concept validation to funded program
+            \item Pioneered a trajectory-prediction capability using LLM architectures, leading development from novel research concept to a live demonstration for a government sponsor
+            \item Generated two patent applications from portfolio research, translating emerging technology into protectable intellectual property for national security applications
+    \end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+	\textsc{Mar 2023}--\textsc{Apr 2024} & Chief Scientist of EO Remote Sensing and Imaging at \textsc{GDIT}  \\  
+	& \emph{Machine Learning \& Computer Vision ATR} \\   
+	& \footnotesize{ 
+		\begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+			\vspace{-0.2cm}
+			\item Served as the technical authority on the development of automated ATR and anomaly-detection algorithms for large geospatial imagery datasets
+			\item Transitioned prototype computer-vision algorithms into the production code base, defining performance metrics and evaluation processes used to validate capability under operational conditions
+			\item Briefed customers on AI/ML integration with EO/IR sensing and supported technical proposals that expanded expanded contract scope
+	\end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+	\textsc{Jan 2020}--\textsc{Mar 2023} & Lead Computational Imaging Scientist at \textsc{MITRE}  \\  
+	& \emph{Rapid Prototyping} \\   
+	& \footnotesize{ 
+	\begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+		\vspace{-0.2cm}
+		\item Through-wall radar sensing and tracking
+		\item LIDAR-based obstacle avoidance for autonomous mine-clearing vehicles
+		\item Non-contact biometric collection
+	\end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+\textsc{Feb 2017}--\textsc{Jan 2020} & Research Physicist at \textsc{U.S. Naval Research Laboratory}  \\  
+& \emph{Computational Optics, Sensing, and Imaging} \\   
+& \footnotesize{ 
+\begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+	\vspace{-0.2cm}
+	\item Adaptive Optics (AO) simulation in extended volume turbulence
+	\item Synthetic Aperture Radar (SAR) image analysis and anomaly detection onboard autonomous systems
+	% \item Orbital Angular Momentum (OAM) beams for underwater communications
+	\item Structured illumination for night vision applications
+	\item Non-Line of Sight (NLOS) imaging using speckle correlations
+	\item Holographic imaging through fog and turbid water
+\end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+\textsc{Aug 2010}--\textsc{Dec 2016} & Research Assistant at \textsc{University of Colorado at Boulder}\\
+& \emph{Lensless High-Resolution Imaging with Extreme Ultraviolet Light}\\ 
+& \footnotesize{
+	\begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+		\vspace{-0.2cm}
+		\item Extreme Ultraviolet (EUV) light generation using the high-harmonic process
+		\item High-resolution Coherent Diffraction Imaging (CDI)
+		\item Pump-probe stroboscopic experiments 
+
+\end{itemize}}\\
+\end{tabular}
+
+\begin{tabular}{rp{13cm}}
+    \textsc{Jun 2012}--\textsc{Aug 2012} & Internship at \textsc{Lawrence Livermore National Lab}  \\  
+    & \emph{Department of Homeland Security Summer Program} \\   
+    & \footnotesize{ 
+        \begin{itemize}[topsep=0pt,itemsep=0pt,partopsep=0pt,parsep=0pt]
+            \vspace{-0.2cm}
+            \item Hardware assembly for Free-Electron Laser (FEL) experiments
+            \item Data analysis and visualization
+    \end{itemize}}\\
+\end{tabular}
+
+\vspace{-0.1cm}
+\section{Awards, Fellowships \& Scholarships}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{l | l  }
+		 2009 Mensa Scholarship &  2010 SPIE Scholarship\\
+		 2011 NSF COSI Traineeship &  2011 Ford Foundation Fellowship \footnotesize(2-year fellowship)\normalsize \\
+		 2011 NSF GRFP \footnotesize(3-year fellowship)\normalsize & 2015 OSA Foundation's Outstanding Student Paper\\
+		 2017 APS Dissertation Prize in Laser Science &  2017 NRL Postdoc Fellowship \footnotesize(2-year fellowship)\normalsize\\
+		 2018 NRL Research Publication Award &  2022 MITRE Trailblazer Award  \\
+		 2024 MITRE Breakthrough Award & \\
+	\end{tabular}
+\end{table}
+
+\vspace{-0.1cm}
+\section{Education}
+% \vspace{0.2cm}
+\begin{tabular}{rl}	
+	\textsc{Dec} 2016 & Doctor of Philosophy in \textbf{Physics}, \textsc{The University of Colorado at Boulder}\\
+	\vspace{0.5cm}
+	& \small\emph{Received dissertation award from the American Physical Society }\\
+	\textsc{May} 2010 & Bachelor of Arts in \textbf{Physics}, \textsc{The University of Colorado at Boulder}\\
+	& \small \textit{Graduated with summa cum laude honors}\\
+\end{tabular}
+
+\vspace{-0.3cm}
+\section{Patents}
+\vspace{0.2cm}
+\begin{enumerate}[leftmargin=*]
+	\item A Watnik, \textbf{DF Gardner}, T Dubose, ``Methods and apparatuses for wavefront reconstruction,'' \emph{US Patent 12,432,452, 2025}.
+    \item R Houvener, G Cardinale, R Lamond, M Stenner, D Moriarty, C Zhao, \& \textbf{DF Gardner}, ``Scalable Coherent Laser Array Systems,'' \emph{US Patent App. 18/927,444, 2024}.
+	\item  M Tanksalvala, DE Adams, \textbf{DF Gardner}, CL Porter, \& GF Mancini, ``Modulus-Enforced Probe,'' \emph{US Patent 11,709,132, 2023}.
+	\item S Durvasula, \textbf{DF Gardner}, \emph{et al.}, ``Systems and methods for remote optical screening of individuals in entryways,'' \emph{US Patent App. 18/111,312, 2023}.
+	\item \textbf{DF Gardner}, ``Apparatuses and Methods for Imaging Incoherently Illuminated Objects,'' \emph{US Patent App. 17/331,932, 2021}.
+\end{enumerate}
+
+\section{Publications -- 19 peer-reviewed, 1,900+ citations, h-index 18}
+\vspace{0.2cm}
+
+% \textbf{19 peer-reviewed publications, 1,900+ citations, h-index of 18}
+
+\begin{enumerate}[leftmargin=*]
+	
+	\item S Divitt, S Park, H Gemar, KP Judd, H Dave, D Lin, \textbf{DF Gardner}, AT Watnik, ``Structured illumination and image enhancement of three-dimensional and moving objects at a distance via incoherent Fourier Ptychography,'' \emph{Applied Optics} \textbf{63}(8), C8-C14 (2024).
+	
+	\item TB DuBose, \textbf{DF Gardner}, AT Watnik, ``Intensity-enhanced deep network wavefront reconstruction in Shack–Hartmann sensors,'' \emph{Optics Letters} \textbf{45}(7), 1699-1702 (2020).
+
+	\item S Divitt, \textbf{DF Gardner}, AT Watnik, ``Imaging around corners in the mid-infrared using speckle correlations,'' \emph{Optics Express} \textbf{28}(8), 11051-11064 (2020).
+
+	\item \textbf{DF Gardner}, S Divitt, AT Watnik, ``Ptychographic imaging of incoherently illuminated extended objects using speckle correlations,'' \emph{Applied Optics} \textbf{58}(13), 3564-3569 (2019).
+	
+	\item AV Kanaev, AT Watnik, \textbf{DF Gardner}, C Metzler, KP Judd, P Lebow, KM Novak, \& JR Lindle, ``Imaging through extreme scattering in extended dynamic media,''  \emph{Optics Letters} \textbf{43}(13), 3088-3091 (2018).
+	
+	\quad $\rightarrow$ \textbf{Paper highlighted in OSA's 2018 Year in Review and winner of 2018 NRL publication award}
+	
+	\item RM Karl, GF Mancini, JL Knobloch, TD Frazer, JN Hernandez-Charpak, B Abad, \textbf{DF Gardner}, ER Shanblatt, M Tanksalvala, CL Porter, CS Bevis, DE Adams, HC Kapteyn, \& MM Murnane, ``Full-field imaging of thermal and acoustic dynamics in an individual nanostructure using tabletop high harmonic beams,'' \emph{Science Advances} \textbf{4}(10), eaau4295 (2018).
+	
+	\item  C Bevis, R Karl Jr., J Reichanadter, \textbf{DF Gardner}, C Porter, E Shanblatt, M Tanksalvala, GF Mancini, H Kapteyn, M Murnane \& D Adams, ``Multiple beam ptychography for large field-of-view, high throughput, quantitative phase contrast imaging,''  \emph{Ultramicroscopy} \textbf{184}(A), 164-171 (2018).
+	
+	\item A Pryor, A Rana, R Xu, JA Rodriguez, Y Yang, M Gallagher-Jones, H Jiang, K Kanhaiya, M Nathanson, J Park, S Kim, S Kim, D Nam, Y Yue, J Fan, Z Sun, B Zhang, \textbf{DF Gardner}, CSB Dias, Y Joti, T Hatsui, T Kameshima, Y Inubushi, K Tono, JY Lee, M Yabashi, C Song, T Ishikawa, HC Kapteyn, MM Murnane, H Heinz, J Miao, ``Single-shot 3D coherent diffractive imaging of core-shell nanoparticles with elemental specificity,'' \emph{Scientific Reports} \textbf{8}(1), 8284 (2018).
+	
+	\quad $\rightarrow$ \textbf{Collaboration with UCLA and the SACLA free-electron laser facility in Japan}
+	
+	\item \textbf{DF Gardner}, M Tanksalvala, ER Shanblatt, X Zhang, BR Galloway, CL Porter, R Karl Jr, C Bevis, DE Adams, HC Kapteyn, MM Murnane \& GF Mancini, ``Subwavelength coherent imaging of periodic samples using a 13.5 nm tabletop high harmonic light source,'' \emph{Nature Photonics} \textbf{11}, 259-263 (2017).
+	
+	\quad $\rightarrow$ \textbf{Paper highlighted in OSA's 2017 Year in Review}
+	
+	\quad $\rightarrow$ \textbf{This paper has over 150 citations}
+	
+	\item ER Shanblatt, CL Porter, \textbf{DF Gardner}, GF Mancini, RM Karl Jr, MD Tanksalvala, CS Bevis, VH Vartanian, HC Kapteyn, DE Adams \& MM Murnane, ``Quantitative chemically specific coherent diffractive imaging of reactions at buried interfaces with few nanometer precision,'' \emph{Nano Letters} \textbf{16}(9), 5444-5450 (2016).
+	
+	\item B Zhang, \textbf{DF Gardner}, MH Seaberg, ER Shanblatt, CL Porter, R Karl, CA Mancuso, HC Kapteyn, MM Murnane \& DE Adams, ``Ptychographic hyperspectral spectromicroscopy with an extreme ultraviolet high harmonic comb,''  \emph{Optics Express} \textbf{24}(16), 18745-18754 (2016).
+	
+	\item R Karl, C Bevis, R Lopez-Rios, J Reichanadter, \textbf{DF Gardner}, C Porter, E Shanblatt, M Tanksalvala, GF Mancini, M Murnane, H Kapteyn \& D Adams, ``Spatial, spectral, and polarization multiplexed ptychography,'' \emph{Optics Express} \textbf{23}(23), 30250-30258 (2015).
+	
+	\item B Zhang, \textbf{DF Gardner}, MD Seaberg, ER Shanblatt, HC Kapteyn, MM Murnane \& DE Adams, ``High contrast 3D imaging of surfaces near the wavelength limit using tabletop EUV ptychography,'' \emph{Ultramicroscopy} \textbf{158}, 98-104 (2015).
+	
+	\quad $\rightarrow$ \textbf{Work featured on journal and Laser Focus World covers}
+	
+	\quad $\rightarrow$ \textbf{This paper has over 75 citations}
+	
+	\item  MD Seaberg, B Zhang, \textbf{DF Gardner}, ER Shanblatt, MM Murnane, HC Kapteyn \& DE Adams, ``Tabletop nanometer extreme ultraviolet imaging in an extended reflection mode using coherent Fresnel ptychography,''  \emph{Optica} \textbf{1}(1), 39-44 (2014).
+	
+	\quad $\rightarrow$ \textbf{This paper has over 125 citations}
+	
+	\item T Pardini, S Boutet, J Bradley, T Döppner, LB Fletcher, \textbf{DF Gardner}, RM Hill, MS Hunter, J Krzywinski, M Messerschmidt, AE Pak, F Quirin, K Sokolowski-Tinten, GJ Williams, SP Hau-Riege, ``Silicon mirrors for high-intensity x-ray pump and probe experiments,''  \emph{Physical Review Applied} \textbf{1}(4), 044007 (2014).
+	
+	\quad $\rightarrow$ \textbf{Collaboration with LLNL and LCLS free-electron laser facility at SLAC}
+	
+	\item B Zhang, MD Seaberg, DE Adams, \textbf{DF Gardner}, ER Shanblatt, JM Shaw, W Chao, EM Gullikson, F Salmassi, HC Kapteyn \& MM Murnane, ``Full field tabletop EUV coherent diffractive imaging in a transmission geometry,'' \emph{Optics Express} \textbf{21}(19), 21970-21980 (2013).
+	
+	\item  DE Adams, LS Martin, MD Seaberg, \textbf{DF Gardner}, HC Kapteyn \& MM Murnane, ``A generalization for optimized phase retrieval algorithms,'' \emph{Optics Express} \textbf{20}(22), 24778-24790 (2012).
+	
+	\item \textbf{DF Gardner}, B Zhang, MD Seaberg, LS Martin, DE Adams, F Salmassi, E Gullikson, HC Kapteyn \& MM Murnane, ``High numerical aperture reflection mode coherent diffraction microscopy using off-axis apertured illumination,'' \emph{Optics Express} \textbf{20}(17), 19050-19059 (2012).
+	
+	\quad $\rightarrow$ \textbf{This paper has over 75 citations}
+	
+	\item  Q Liu, Y Cui, \textbf{DF Gardner}, X Li, S He \& II Smalyukh, ``Self-alignment of plasmonic gold nanorods in reconfigurable anisotropic fluids for tunable bulk metamaterial applications,''  \emph{Nano Letters} \textbf{10}(4), 1347-1353 (2010).
+	
+	\quad $\rightarrow$ \textbf{This paper has over 350 citations}
+
+\end{enumerate}
+
+\section{Other Publications}
+\begin{enumerate}[leftmargin=*]
+	
+	\item AT Watnik \& \textbf{DF Gardner}, ``Wavefront Sensing in Deep Turbulence,''  \emph{Optics and Photonics News} \textbf{29}(10), 39-45 (2018).
+	
+	\quad $\rightarrow$ \textbf{Article featured on the cover}
+	
+	\item AV Kanaev, AT Watnik, \textbf{DF Gardner}, KP Judd, P Lebow, JR Lindle, C Metzler, \& KM Novak, ``Imaging Through Macroscopic Scattering Media,'' \emph{Optics and Photonics News} \textbf{29}(12), 30-31 (2018).
+	
+	\item M Tanksalvala, C Porter, \textbf{DF Gardner}, X Zhang, E Shanblatt, B Galloway, R Karl Jr., C Bevis, G Mancini, D Adams, H Kapteyn \& M Murnane, ``Subwavelength EUV Imaging,'' \emph{Optics and Photonics News} \textbf{28}(12), 28-29 (2017).
+	
+\end{enumerate}
+
+\end{document}
