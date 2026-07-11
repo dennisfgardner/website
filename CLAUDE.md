@@ -52,3 +52,34 @@ python3 -m http.server 8080
 ## What still needs real content
 
 - The blog posts in `blog_posts.py` are still AI-generated placeholder content (posts and comments). Edit `POSTS` there and rerun `python3 cv_to_html.py` to regenerate `blog.html`.
+
+## Future Work
+
+The site is hosted on Cloudflare's free tier, so **client-side JavaScript is allowed** (the original "static HTML/CSS only" assumption was wrong). Two LaTeX-related features are planned. They use **different** strategies on purpose — see the reasoning in each.
+
+### Strategy 1 — Ph.D. thesis: display as a PDF
+
+A thesis is a large, finished, complex document (university class file, custom macros, figures/TikZ, tables, bibliography). Converting it to HTML (Pandoc/LaTeXML) is high-effort and fragile, and would need re-fixing every time the source changes — for no benefit a PDF doesn't already provide. So: **compile once to PDF and present it, don't convert it.**
+
+Implementation outline:
+
+- Compile the thesis `.tex` → `thesis.pdf` with the existing LaTeX toolchain; place the PDF in the repo (e.g. `thesis.pdf`, or a `thesis/` folder). Note: it's a large binary — decide whether to commit it or keep it out of git via `.gitignore` and upload separately.
+- Add a generated page: a new `render_thesis()` in `cv_to_html.py` and a `NAV_LINKS` entry (`('thesis.html', 'Thesis', 'thesis')`). Adding it to `NAV_LINKS` auto-wires the nav in both directions across every page. Optionally add an "Explore" card on the homepage (`render_index`).
+- Page layout: real HTML for the **title, abstract, and committee/advisor** (good for skimming + SEO), then an **embedded PDF viewer** (a simple `<iframe src="thesis.pdf">`, or PDF.js for a nicer cross-browser viewer), plus a prominent **Download PDF** button/link.
+- Add styling for the thesis page to `styles.css` (single source of truth).
+
+### Strategy 2 — Blog: Markdown + LaTeX math (KaTeX) + code highlighting (Prism.js)
+
+Goal is prose + figures + code snippets + equations, read comfortably on any device. A PDF reads badly on phones and loses SEO/links/site styling, so the blog should render **in the page**. But full-LaTeX-document conversion is fragile — and unnecessary. The realization: you don't need full LaTeX, you need **Markdown with LaTeX math**. Write prose/figures/code in Markdown; write **math in LaTeX syntax** (`$...$` inline, `$$...$$` display) and let a JS library render just the math.
+
+Libraries (loaded via CDN, consistent with the existing Google Fonts CDN link):
+
+- **KaTeX** — renders the math. Faster than MathJax; use its `auto-render` extension to scan the page for `$...$` / `$$...$$` after load.
+- **Prism.js** — syntax-highlights fenced code blocks (` ```perl `, ` ```python `, etc.) via `language-*` classes on `<pre><code>`.
+
+Implementation outline:
+
+- Author posts as **Markdown** in `blog_posts.py` (the `POSTS` list currently holds pre-rendered HTML `content`; switch it to Markdown source).
+- Convert Markdown → HTML at build time in `cv_to_html.py`. This adds a dependency beyond the stdlib — recommended: **`python-markdown`** plus **`pymdown-extensions`**. Use the `pymdownx.arithmatex` extension so `$...$`/`$$...$$` math is emitted as KaTeX-ready spans and **not mangled** by Markdown (a common failure mode — Markdown otherwise eats `_`, `\`, and `*` inside math). Add a `requirements.txt`; the repo already has a `venv/`.
+- Load KaTeX + Prism **only on pages that need them** (blog, and any code-snippet page): add an optional `head_extra`/`scripts` parameter to the shared `page()` helper so those CDN `<link>`/`<script>` tags are injected per-page rather than site-wide.
+- Style code blocks / KaTeX overrides in `styles.css` as needed (Prism ships a theme; adjust to match the `#0ea5e9` accent).

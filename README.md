@@ -1,3 +1,3 @@
 # Website
 
-Static website repo. It's hosted on cloudflare. Cloudflare is linked to the github repo. It should update with every push.
+This website is hosted on cloudflare (free tier). Cloudflare is linked to the github repo. It updates with very push.
