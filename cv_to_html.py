@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Parse CV_ver18_20260706.tex and generate website HTML pages."""
 
+import hashlib
 import os
 import re
 import shutil
@@ -16,6 +17,20 @@ CV_PATH = "CV_ver18_20260706.tex"
 HEADSHOT_SRC = "headshot.jpeg"
 HEADSHOT_WEB = "headshot_web.jpg"
 HEADSHOT_MAX_PX = 600  # longest edge of the web copy
+
+# Ph.D. thesis: the compiled PDF, presented directly rather than converted to
+# HTML (see the "Future Work" strategy note in CLAUDE.md). THESIS_INFO is a
+# plain literal (not tex-derived) — edit the title/abstract fields directly
+# once the final thesis title and abstract text are available.
+THESIS_PDF = "Gardner_thesis.pdf"
+THESIS_INFO = {
+    'title': 'Ph.D. Dissertation (title placeholder — update THESIS_INFO in cv_to_html.py)',
+    'degree': 'Doctor of Philosophy in Physics',
+    'institution': 'The University of Colorado at Boulder',
+    'date': 'December 2016',
+    'note': 'Received the APS Dissertation Prize in Laser Science',
+    'abstract': '',
+}
 
 # ---------------------------------------------------------------------------
 # LaTeX cleaning helpers
@@ -230,6 +245,16 @@ def parse_enumerate(raw, pub_mode=False):
 # link it rather than carrying inline CSS — see styles.css to change any style.
 STYLESHEET = "styles.css"
 
+def stylesheet_href():
+    """styles.css URL with a content-hash query string, so browsers fetch the
+    latest CSS after each regeneration instead of serving a stale cached copy."""
+    try:
+        with open(STYLESHEET, 'rb') as f:
+            digest = hashlib.md5(f.read()).hexdigest()[:8]
+        return f'{STYLESHEET}?v={digest}'
+    except FileNotFoundError:
+        return STYLESHEET
+
 # The nav links, in order. Each is (href, label, active_key); the active page's
 # link gets class="active" so it highlights site-wide.
 NAV_LINKS = [
@@ -237,6 +262,7 @@ NAV_LINKS = [
     ('about.html', 'About', 'about'),
     ('publications.html', 'Publications', 'publications'),
     ('blog.html', 'Blog', 'blog'),
+    ('thesis.html', 'Thesis', 'thesis'),
     ('contact.html', 'Contact', 'contact'),
 ]
 
@@ -268,7 +294,7 @@ def page(title, active, body):
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{STYLESHEET}">
+    <link rel="stylesheet" href="{stylesheet_href()}">
 </head>
 <body>
 {nav(active)}
@@ -305,6 +331,7 @@ def render_index(data):
             <ul>
                 <li><a href="about.html">About &amp; Experience</a> — background, expertise, and career timeline</li>
                 <li><a href="publications.html">Publications &amp; Patents</a> — 19 peer-reviewed papers, 1,900+ citations, h-index 18, and 5 patents</li>
+                <li><a href="thesis.html">Ph.D. Thesis</a> — full dissertation, view or download</li>
                 <li><a href="contact.html">Contact</a> — get in touch</li>
             </ul>
         </div>
@@ -482,6 +509,39 @@ def render_publications(data):
     return page('Publications – Dennis F. Gardner Jr.', 'publications', body)
 
 # ---------------------------------------------------------------------------
+# render_thesis
+# ---------------------------------------------------------------------------
+
+def render_thesis():
+    info = THESIS_INFO
+    note_html = f'<p class="thesis-note">{info["note"]}</p>' if info['note'] else ''
+    if info['abstract']:
+        abstract_html = f'<p class="thesis-abstract">{info["abstract"]}</p>'
+    else:
+        abstract_html = '<p class="thesis-abstract thesis-abstract-placeholder">Abstract coming soon.</p>'
+
+    body = f'''    <div class="container container-wide">
+        <section class="thesis-header">
+            <h2>{info["title"]}</h2>
+            <p class="thesis-meta">{info["degree"]} &middot; {info["institution"]} &middot; {info["date"]}</p>
+            {note_html}
+            {abstract_html}
+            <div class="cta-buttons">
+                <a class="cta-btn cta-btn-primary" href="{THESIS_PDF}" download>Download PDF</a>
+            </div>
+        </section>
+
+        <section>
+            <iframe class="thesis-viewer" src="{THESIS_PDF}" title="{info['title']}">
+                <p>Your browser doesn't support embedded PDFs.
+                    <a href="{THESIS_PDF}">Download the thesis PDF</a> instead.</p>
+            </iframe>
+        </section>
+    </div>'''
+
+    return page('Thesis – Dennis F. Gardner Jr.', 'thesis', body)
+
+# ---------------------------------------------------------------------------
 # render_blog
 # ---------------------------------------------------------------------------
 
@@ -591,6 +651,7 @@ def main():
         'about.html':        render_about(data),
         'contact.html':      render_contact(data),
         'publications.html': render_publications(data),
+        'thesis.html':       render_thesis(),
         'blog.html':         render_blog(blog_posts.POSTS),
     }
 

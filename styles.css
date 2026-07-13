@@ -50,6 +50,7 @@ nav {
     margin: 0 auto;
     padding: 2.5rem 1.5rem 4rem;
 }
+.container-wide { max-width: 1400px; }
 h2 {
     font-size: 1.375rem;
     font-weight: 700;
@@ -317,6 +318,21 @@ code {
     font-size: 0.9em;
 }
 
+/* --- Thesis (thesis.html) ----------------------------------------------- */
+.thesis-header { margin-bottom: 1.5rem; }
+.thesis-meta { color: #6b7280; font-size: 0.95rem; margin: 0.25rem 0 0.75rem; }
+.thesis-note { color: #0ea5e9; font-style: italic; font-size: 0.9rem; margin: 0 0 0.75rem; }
+.thesis-abstract { color: #374151; line-height: 1.6; margin: 0 0 1.5rem; }
+.thesis-abstract-placeholder { color: #6b7280; font-style: italic; }
+.thesis-viewer {
+    display: block;
+    width: 100%;
+    height: 90vh;
+    min-height: 750px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
 /* --- Responsive -------------------------------------------------------- */
 @media (max-width: 700px) {
     .timeline-header { flex-direction: column; gap: 0.25rem; }
@@ -338,4 +354,5 @@ code {
     .headshot { width: 140px; height: 140px; }
     .hero-name { font-size: 1.75rem; }
     .contact-grid { grid-template-columns: 1fr; }
+    .thesis-viewer { height: 70vh; min-height: 420px; }
 }
