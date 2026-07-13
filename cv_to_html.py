@@ -24,12 +24,30 @@ HEADSHOT_MAX_PX = 600  # longest edge of the web copy
 # once the final thesis title and abstract text are available.
 THESIS_PDF = "Gardner_thesis.pdf"
 THESIS_INFO = {
-    'title': 'Ph.D. Dissertation (title placeholder — update THESIS_INFO in cv_to_html.py)',
+    'title': 'Coherent Diﬀractive Imaging Near the Spatio-Temporal Limit with High-Harmonic Sources',
     'degree': 'Doctor of Philosophy in Physics',
     'institution': 'The University of Colorado at Boulder',
     'date': 'December 2016',
     'note': 'Received the APS Dissertation Prize in Laser Science',
-    'abstract': '',
+    'abstract': 
+        """This thesis discusses methods for high-resolution static and stroboscopic microscopy using
+        tabletop coherent extreme ultraviolet (EUV) radiation from tabletop high-harmonic generation
+        (HHG) sources. These coherent short wavelength light sources are combined with a lensless,
+        computational, phase and amplitude-contrast technique called ptychographic Coherent Diﬀractive
+        Imaging (CDI). While ptychographic CDI techniques are currently widespread for visible, EUV and
+        X-ray microscopy, no previous work has been able to achieve at-wavelength resolution of extended
+        samples, especially in a reﬂection geometry, nor has previous work been able to image periodic
+        samples with high-ﬁdelity. In this work, a combination of experimental methods for high-numerical
+        aperture imaging and novel computational algorithms enabled the highest resolution-to-wavelength
+        demonstrations using any CDI technique. These algorithms include tilted plane correction, which
+        enables high-resolution imaging of surfaces in a reﬂection geometry, and a powerful technique
+        termed modulus enforced probe, which enables both imaging of periodic objects and convergence
+        of the ptychographic CDI algorithm in fewer iterations. Furthermore, the ultrafast pulse duration
+        of the high-harmonic radiation is harnessed to demonstrate proof-of-principle pump-probe
+        imaging of nanostructures, capturing thermal transport processes in nanostructures with an axial
+        resolution of 3 angstroms. Stroboscopic imaging with nanoscale resolution is a critical tool for the
+        investigation of nanoscale heat ﬂow and magnetic switching for the advancement of next generation
+""",
 }
 
 # ---------------------------------------------------------------------------
@@ -536,6 +554,10 @@ def render_thesis():
                 <p>Your browser doesn't support embedded PDFs.
                     <a href="{THESIS_PDF}">Download the thesis PDF</a> instead.</p>
             </iframe>
+            <div class="thesis-viewer-fallback">
+                <p>PDF preview isn't supported in this browser. Open the full document instead:</p>
+                <a class="cta-btn cta-btn-primary" href="{THESIS_PDF}" target="_blank" rel="noopener">Open PDF</a>
+            </div>
         </section>
     </div>'''
 

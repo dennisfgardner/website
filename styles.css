@@ -332,6 +332,10 @@ code {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
 }
+/* Mobile Safari renders PDFs inside <iframe> as a static first-page snapshot
+   with no scrolling, so on small screens skip the iframe and link out to the
+   PDF instead — opened as its own page, iOS's native viewer scrolls fine. */
+.thesis-viewer-fallback { display: none; }
 
 /* --- Responsive -------------------------------------------------------- */
 @media (max-width: 700px) {
@@ -354,5 +358,14 @@ code {
     .headshot { width: 140px; height: 140px; }
     .hero-name { font-size: 1.75rem; }
     .contact-grid { grid-template-columns: 1fr; }
-    .thesis-viewer { height: 70vh; min-height: 420px; }
+    .thesis-viewer { display: none; }
+    .thesis-viewer-fallback {
+        display: block;
+        text-align: center;
+        padding: 2.5rem 1.5rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+    .thesis-viewer-fallback p { color: #6b7280; margin: 0 0 1rem; font-size: 0.9rem; }
 }
