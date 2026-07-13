@@ -33,6 +33,8 @@ The script uses only the Python standard library. It parses LaTeX sections delim
 
 If the CV file is renamed or a new version is used, update `CV_PATH` at the top of `cv_to_html.py`.
 
+Each peer-reviewed publication `\item` ends with `\href{https://doi.org/<DOI>}{link}`, which renders as a small "link" badge to the paper's abstract page (styled via `.pub-text a` in `styles.css`). New publication entries should follow the same convention — find the DOI and append it the same way.
+
 ## Changing the look of the site
 
 All styling lives in `styles.css` — change a value there once and it applies across every page. The Python `render_*` functions emit only HTML (body markup + class names); they carry no CSS. If you add a new class in `styles.css`, reference it from the relevant `render_*` function; if you add a whole new page, link `styles.css` via the shared `page()` helper.

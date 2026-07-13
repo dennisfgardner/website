@@ -288,7 +288,7 @@ def render_index(data):
     body = f'''    <div class="container">
         <div class="intro">
             <div class="intro-text">
-                <p class="tagline">Physicist &nbsp;·&nbsp; Systems Engineer &nbsp;·&nbsp; AI &amp; ML Researcher</p>
+                <p class="tagline">Physicist &nbsp;·&nbsp; Systems Engineer &nbsp;·&nbsp; AI &amp; ML Practitioner</p>
                 <h2 class="hero-name">Hi, I&#8217;m Dennis.</h2>
                 <p class="hero-summary">{first_two}</p>
                 <div class="cta-buttons">
