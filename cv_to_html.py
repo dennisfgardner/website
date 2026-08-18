@@ -1,16 +1,40 @@
 #!/usr/bin/env python3
-"""Parse CV_ver18_20260706.tex and generate website HTML pages."""
+"""Parse CV_ver19_20260706.tex and generate website HTML pages."""
 
 import hashlib
+import html
 import os
 import re
 import shutil
 import subprocess
 import sys
 
+import markdown
+
 import blog_posts
 
-CV_PATH = "CV_ver18_20260706.tex"
+CV_PATH = "CV_ver19_20260706.tex"
+
+# Markdown → HTML for blog post bodies (see blog_posts.py).
+#   fenced_code        emits <pre><code class="language-bash">, which is exactly
+#                      what Prism reads for highlighting.
+#   pymdownx.arithmatex converts $...$/$$...$$ to \(...\)/\[...\] at build time.
+#                      Doing the math pass here rather than in the browser means
+#                      python-markdown's code-span/fence protection applies, so
+#                      shell variables like $IPPROOT inside a ```bash block are
+#                      never mistaken for math. KaTeX is configured with the
+#                      matching \( and \[ delimiters in post_assets().
+MD_EXTENSIONS = [
+    'fenced_code',
+    'tables',
+    'attr_list',
+    'sane_lists',
+    'smarty',
+    'pymdownx.arithmatex',
+]
+MD_EXTENSION_CONFIGS = {
+    'pymdownx.arithmatex': {'generic': True},
+}
 
 # Headshot: source photo (drop in a new one to replace) and the web-sized copy
 # that index.html references. The web copy is regenerated on each run.
@@ -302,7 +326,15 @@ FOOTER = '''    <footer>
         <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
     </footer>'''
 
-def page(title, active, body):
+def page(title, active, body, head_extra='', scripts=''):
+    """Wrap body in the shared page chrome.
+
+    head_extra and scripts let a single page pull in assets the rest of the site
+    does not need (KaTeX, Prism) — see post_assets() — so those CDN requests are
+    not paid for site-wide.
+    """
+    head_extra = f'\n{head_extra}' if head_extra else ''
+    scripts = f'\n{scripts}' if scripts else ''
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -312,12 +344,12 @@ def page(title, active, body):
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{stylesheet_href()}">
+    <link rel="stylesheet" href="{stylesheet_href()}">{head_extra}
 </head>
 <body>
 {nav(active)}
 {body}
-{FOOTER}
+{FOOTER}{scripts}
 </body>
 </html>'''
 
@@ -564,80 +596,182 @@ def render_thesis():
     return page('Thesis – Dennis F. Gardner Jr.', 'thesis', body)
 
 # ---------------------------------------------------------------------------
-# render_blog
+# Blog: Markdown bodies -> blog.html index + one blog-<slug>.html per post
 # ---------------------------------------------------------------------------
 
+# CDN assets pulled in per-post by post_assets(), never site-wide.
+PRISM_VERSION = '1.29.0'
+KATEX_VERSION = '0.16.11'
+
+def render_markdown(path):
+    """Convert a Markdown post body to HTML, then promote its images to
+    <figure> elements (see wrap_figures)."""
+    with open(path, encoding='utf-8') as f:
+        text = f.read()
+    body = markdown.markdown(
+        text, extensions=MD_EXTENSIONS, extension_configs=MD_EXTENSION_CONFIGS)
+    return wrap_figures(body)
+
+# A paragraph holding nothing but an image, optionally followed by a paragraph
+# that is entirely bold — the caption convention the Markdown sources use.
+_FIGURE_RE = re.compile(
+    r'<p>(<img [^>]*?/?>)</p>'
+    r'(?:\s*<p><strong>(.*?)</strong></p>)?',
+    re.DOTALL)
+
+def wrap_figures(html_body):
+    """Turn image-only paragraphs into <figure>, absorbing a following all-bold
+    paragraph as the <figcaption>.
+
+    Markdown has no figure syntax, so posts write a caption as a bold line
+    directly under the image. Converting here keeps the Markdown sources plain
+    (and re-syncable from an upstream README) instead of littered with raw HTML.
+    """
+    def replace(m):
+        img, caption = m.group(1), m.group(2)
+        if caption:
+            return (f'<figure>{img}\n'
+                    f'<figcaption>{caption.strip()}</figcaption></figure>')
+        return f'<figure>{img}</figure>'
+    return _FIGURE_RE.sub(replace, html_body)
+
+def post_assets(post):
+    """Return (head_extra, scripts) for a post, loading Prism and KaTeX only
+    where the post's "code"/"math" flags ask for them."""
+    head, scripts = [], []
+
+    if post.get('code'):
+        head.append(
+            f'    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/'
+            f'prism/{PRISM_VERSION}/themes/prism.min.css">')
+        # The autoloader resolves language files relative to its own URL unless
+        # told otherwise, which 404s on a CDN — hence the explicit path.
+        scripts.append(
+            f'    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/'
+            f'{PRISM_VERSION}/components/prism-core.min.js"></script>\n'
+            f'    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/'
+            f'{PRISM_VERSION}/plugins/autoloader/prism-autoloader.min.js"\n'
+            f'        data-autoloader-path="https://cdnjs.cloudflare.com/ajax/libs/'
+            f'prism/{PRISM_VERSION}/components/"></script>')
+
+    if post.get('math'):
+        head.append(
+            f'    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/'
+            f'katex@{KATEX_VERSION}/dist/katex.min.css">')
+        # Delimiters match pymdownx.arithmatex's generic output (see MD_EXTENSIONS).
+        scripts.append(
+            f'    <script defer src="https://cdn.jsdelivr.net/npm/katex@{KATEX_VERSION}'
+            f'/dist/katex.min.js"></script>\n'
+            f'    <script defer src="https://cdn.jsdelivr.net/npm/katex@{KATEX_VERSION}'
+            f'/dist/contrib/auto-render.min.js"\n'
+            f'        onload="renderMathInElement(document.body, {{delimiters: ['
+            f'{{left: String.raw`\\[`, right: String.raw`\\]`, display: true}}, '
+            f'{{left: String.raw`\\(`, right: String.raw`\\)`, display: false}}]}});">'
+            f'</script>')
+
+    return '\n'.join(head), '\n'.join(scripts)
+
+def post_url(post):
+    return f"blog-{post['slug']}.html"
+
+def tags_html(post, indent):
+    pad = ' ' * indent
+    spans = '\n'.join(
+        f'{pad}    <span class="tag">{html.escape(t)}</span>' for t in post['tags'])
+    return f'{pad}<div class="tags">\n{spans}\n{pad}</div>'
+
 def render_blog(posts):
-    articles = []
+    """blog.html — the index: one card per post, no bodies."""
+    cards = []
     for post in posts:
-        tags_html = '\n'.join(
-            f'                <span class="tag">{t}</span>' for t in post['tags'])
-
-        comments = post.get('comments', [])
-        comment_items = '\n'.join(
-            f'''                <div class="comment">
-                    <p><span class="comment-author">{c["author"]}</span><span class="comment-date">{c["date"]}</span></p>
-                    <p>{c["text"]}</p>
-                </div>''' for c in comments)
-        comments_html = f'''
-            <div class="comments-section">
-                <h3>Comments ({len(comments)})</h3>
-{comment_items}
-            </div>''' if comments else ''
-
-        articles.append(f'''        <article id="{post['id']}" class="blog-post">
-            <div class="blog-header">
-                <h2>{post['title']}</h2>
-                <span class="blog-date">{post['date']}</span>
-            </div>
-
-            <div class="blog-content">
-{post['content']}
-            </div>
-
-            <div class="tags">
-{tags_html}
-            </div>
-{comments_html}
+        cards.append(f'''        <article class="post-card">
+            <h3 class="post-card-title"><a href="{post_url(post)}">{html.escape(post['title'])}</a></h3>
+            <span class="blog-date">{html.escape(post['date'])}</span>
+            <p class="post-excerpt">{html.escape(post['excerpt'])}</p>
+{tags_html(post, 12)}
+            <a class="post-readmore" href="{post_url(post)}">Read more &rarr;</a>
         </article>''')
 
-    articles_html = '\n\n'.join(articles)
+    cards_html = '\n\n'.join(cards) if cards else (
+        '        <p class="blog-intro">No posts yet.</p>')
 
     body = f'''    <div class="container">
         <h2>Blog</h2>
         <p class="blog-intro">Thoughts on physics, AI, and systems engineering.</p>
 
-{articles_html}
+{cards_html}
     </div>'''
 
     return page('Blog – Dennis F. Gardner Jr.', 'blog', body)
+
+def render_post(post):
+    """blog-<slug>.html — one full post, body converted from its Markdown source."""
+    head_extra, scripts = post_assets(post)
+    content = render_markdown(post['source'])
+
+    repo = post.get('repo')
+    repo_html = f'''
+            <p class="post-source">Source code:
+                <a href="{repo}" target="_blank" rel="noopener">{html.escape(repo)}</a></p>''' if repo else ''
+
+    body = f'''    <div class="container">
+        <a class="post-back" href="blog.html">&larr; Blog</a>
+
+        <article class="blog-post">
+            <div class="blog-header">
+                <h1>{html.escape(post['title'])}</h1>
+                <span class="blog-date">{html.escape(post['date'])}</span>
+            </div>
+
+{tags_html(post, 12)}
+
+            <div class="blog-content">
+{content}
+            </div>{repo_html}
+        </article>
+    </div>'''
+
+    return page(f"{post['title']} – Dennis F. Gardner Jr.", 'blog', body,
+                head_extra, scripts)
 
 # ---------------------------------------------------------------------------
 # Headshot
 # ---------------------------------------------------------------------------
 
 def generate_headshot():
-    """Regenerate the web-sized headshot from HEADSHOT_SRC using macOS `sips`.
+    """Regenerate the web-sized headshot from HEADSHOT_SRC.
 
-    Skips gracefully (with a note) if the source photo or `sips` is missing, so
-    the page generation itself never fails on account of the image.
+    Uses macOS `sips` when present and ImageMagick `convert` otherwise, so the
+    resize works on both machines this site is authored from. Skips gracefully
+    (with a note) if the source photo or both tools are missing, so page
+    generation never fails on account of the image.
     """
     if not os.path.exists(HEADSHOT_SRC):
         print(f"Note: {HEADSHOT_SRC} not found — skipping headshot resize "
               f"(index.html still expects {HEADSHOT_WEB}).")
         return
-    if shutil.which("sips") is None:
-        print("Note: `sips` not available (macOS only) — skipping headshot resize. "
-              f"Resize {HEADSHOT_SRC} to {HEADSHOT_MAX_PX}px manually and save as {HEADSHOT_WEB}.")
+
+    if shutil.which("sips"):
+        tool = "sips"
+        cmd = ["sips", "-Z", str(HEADSHOT_MAX_PX), HEADSHOT_SRC, "--out", HEADSHOT_WEB]
+    elif shutil.which("convert"):
+        tool = "convert"
+        # ">" only shrinks — never upscales a photo that is already small.
+        cmd = ["convert", HEADSHOT_SRC,
+               "-resize", f"{HEADSHOT_MAX_PX}x{HEADSHOT_MAX_PX}>",
+               "-quality", "85", HEADSHOT_WEB]
+    else:
+        print("Note: neither `sips` nor ImageMagick `convert` is available — "
+              f"skipping headshot resize. Resize {HEADSHOT_SRC} to "
+              f"{HEADSHOT_MAX_PX}px manually and save as {HEADSHOT_WEB}.")
         return
 
-    result = subprocess.run(
-        ["sips", "-Z", str(HEADSHOT_MAX_PX), HEADSHOT_SRC, "--out", HEADSHOT_WEB],
-        capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
-        print(f"Wrote {HEADSHOT_WEB} (resized from {HEADSHOT_SRC}, max {HEADSHOT_MAX_PX}px)")
+        print(f"Wrote {HEADSHOT_WEB} (resized from {HEADSHOT_SRC} with "
+              f"{tool}, max {HEADSHOT_MAX_PX}px)")
     else:
-        print(f"Warning: sips failed to resize {HEADSHOT_SRC}: {result.stderr.strip()}")
+        print(f"Warning: {tool} failed to resize {HEADSHOT_SRC}: {result.stderr.strip()}")
 
 # ---------------------------------------------------------------------------
 # Main
@@ -677,9 +811,13 @@ def main():
         'blog.html':         render_blog(blog_posts.POSTS),
     }
 
-    for fname, html in files.items():
+    # One page per blog post, in addition to the blog.html index.
+    for post in blog_posts.POSTS:
+        files[post_url(post)] = render_post(post)
+
+    for fname, markup in files.items():
         with open(fname, 'w', encoding='utf-8') as f:
-            f.write(html)
+            f.write(markup)
         print(f"Wrote {fname}")
 
     generate_headshot()
@@ -689,7 +827,7 @@ def main():
     pub_count = len(data['publications'])
     print(f"\nParsed: {exp_count} work entries, {pub_count} publications, "
           f"{len(data['patents'])} patents, {len(data['expertise'])} skills, "
-          f"{len(data['awards'])} awards")
+          f"{len(data['awards'])} awards, {len(blog_posts.POSTS)} blog posts")
 
 if __name__ == '__main__':
     main()

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=87440406">
+    <link rel="stylesheet" href="styles.css?v=2d3f2bbb">
 </head>
 <body>
     <nav>
@@ -25,92 +25,18 @@
         <h2>Blog</h2>
         <p class="blog-intro">Thoughts on physics, AI, and systems engineering.</p>
 
-        <article id="post1" class="blog-post">
-            <div class="blog-header">
-                <h2>The Future of Web Development in 2025</h2>
-                <span class="blog-date">March 15, 2025</span>
-            </div>
-
-            <div class="blog-content">
-                <p>As we navigate through 2025, the landscape of web development continues to evolve at an unprecedented pace. From AI-powered design tools to innovative frontend frameworks, the industry is experiencing a renaissance of creativity and efficiency.</p>
-
-                <h3>AI-Driven Development</h3>
-                <p>Perhaps the most significant shift we're witnessing is the integration of artificial intelligence into the development workflow. Tools that can generate code based on natural language prompts have become sophisticated enough to handle complex tasks that would have taken hours to code manually just a few years ago.</p>
-
-                <blockquote>The rise of AI assistants has not replaced developers but has transformed our role from coding every line to becoming architects who guide these intelligent systems toward creating elegant solutions.</blockquote>
-
-                <p>These AI partners are particularly revolutionary for prototyping, allowing developers to iterate through ideas at lightning speed. The most exciting aspect is how they're democratizing web development, making it accessible to those without traditional coding backgrounds.</p>
-
-                <h3>WebAssembly Dominance</h3>
-                <p>WebAssembly (Wasm) has finally reached the tipping point where it's becoming standard in production environments. The ability to run near-native performance code in the browser has opened doors to applications that were previously unimaginable in a web context.</p>
-
-                <p>Complex 3D visualizations, real-time video processing, and intensive computational tasks now run smoothly in browsers across all devices. The ecosystem around Wasm has matured, with libraries and frameworks that make it accessible without needing to understand the lower-level details.</p>
-
-                <h3>Micro-Frontends Going Mainstream</h3>
-                <p>The micro-frontend architecture has graduated from experimental to essential for large-scale applications. Breaking down monolithic frontends into independently deployable components has proven to be a game-changer for teams working on enterprise applications.</p>
-
-                <h3>Privacy-First Development</h3>
-                <p>With global privacy regulations tightening and users becoming increasingly aware of data practices, privacy-first development has moved from a nice-to-have to a fundamental requirement.</p>
-            </div>
-
+        <article class="post-card">
+            <h3 class="post-card-title"><a href="blog-2d-ipp-cfar.html">A 2D CFAR Detector with Intel IPP</a></h3>
+            <span class="blog-date">August 18, 2026</span>
+            <p class="post-excerpt">Finding small, bright clusters of pixels — stars, or man-made objects in SAR imagery — against a non-uniform background where simple thresholding fails. A 2D Constant False Alarm Rate detector in C++, built on Intel&#x27;s Integrated Performance Primitives and cross-checked against a Python implementation.</p>
             <div class="tags">
-                <span class="tag">Web Development</span>
-                <span class="tag">AI</span>
-                <span class="tag">WebAssembly</span>
-                <span class="tag">Future Tech</span>
+                <span class="tag">Signal Processing</span>
+                <span class="tag">C++</span>
+                <span class="tag">Intel IPP</span>
+                <span class="tag">OpenCV</span>
+                <span class="tag">Computer Vision</span>
             </div>
-
-            <div class="comments-section">
-                <h3>Comments (2)</h3>
-                <div class="comment">
-                    <p><span class="comment-author">Alex Johnson</span><span class="comment-date">March 15, 2025</span></p>
-                    <p>Great insights, Dennis! I've been experimenting with some AI coding assistants and they've transformed my workflow.</p>
-                </div>
-                <div class="comment">
-                    <p><span class="comment-author">Sarah Chen</span><span class="comment-date">March 16, 2025</span></p>
-                    <p>The micro-frontend architecture point resonated with me. We've recently transitioned our platform to this approach and while the initial setup was challenging, the long-term benefits have been substantial.</p>
-                </div>
-            </div>
-        </article>
-
-        <article id="post2" class="blog-post">
-            <div class="blog-header">
-                <h2>My Journey Through the Rocky Mountains</h2>
-                <span class="blog-date">February 28, 2025</span>
-            </div>
-
-            <div class="blog-content">
-                <p>Last month, I embarked on an unforgettable adventure through the majestic Rocky Mountains. The breathtaking landscapes and serene wilderness taught me valuable lessons about perseverance and appreciation for nature's wonders.</p>
-
-                <h3>The Decision to Disconnect</h3>
-                <p>As someone who spends most days immersed in research and computation, I felt a growing need to disconnect completely. With minimal planning but maximum enthusiasm, I packed my hiking gear and set off on a two-week journey that would challenge me physically and mentally.</p>
-
-                <blockquote>There's something profoundly grounding about being reminded of your limitations by a mountain that has stood for millions of years.</blockquote>
-
-                <h3>Finding My Rhythm</h3>
-                <p>By the fourth day, my body began adapting to the altitude, and I settled into a comfortable hiking rhythm. I followed a trail that wound through ancient forests before opening to reveal an alpine lake so vibrantly blue it seemed artificially enhanced – except there was no filter, just nature's incredible palette.</p>
-
-                <h3>Lessons From the Trail</h3>
-                <p>The importance of preparation, adaptability in the face of sudden change, and the value of community — the mountains offered clear parallels to research and engineering work. Some of my best ideas have come while on trails, away from screens.</p>
-            </div>
-
-            <div class="tags">
-                <span class="tag">Personal</span>
-                <span class="tag">Hiking</span>
-                <span class="tag">Rocky Mountains</span>
-            </div>
-
-            <div class="comments-section">
-                <h3>Comments (2)</h3>
-                <div class="comment">
-                    <p><span class="comment-author">Michael Wong</span><span class="comment-date">February 28, 2025</span></p>
-                    <p>This resonates deeply with me. I did a similar trip last summer and came back with a completely different perspective on my work-life balance.</p>
-                </div>
-                <div class="comment">
-                    <p><span class="comment-author">James Wilson</span><span class="comment-date">March 3, 2025</span></p>
-                    <p>The parallel between hiking and development is spot on. There's something about rhythmic movement that gets creative juices flowing.</p>
-                </div>
-            </div>
+            <a class="post-readmore" href="blog-2d-ipp-cfar.html">Read more &rarr;</a>
         </article>
     </div>
     <footer>
