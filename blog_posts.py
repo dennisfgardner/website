@@ -31,6 +31,21 @@ generated HTML sits at the root.
 
 POSTS = [
     {
+        "slug": "nitf-io",
+        "title": "Reading and Writing NITF Files with NITRO and OpenCV",
+        "date": "August 22, 2026",
+        "source": "posts/nitf-io.md",
+        "excerpt": "NITF is the standard container for government and defense imagery — "
+                   "pixels bundled with the metadata that makes them useful. Three small "
+                   "C++ examples built on the NITRO library: printing headers, converting "
+                   "image segments to PNG for OpenCV/numpy/PyTorch, and round-tripping a "
+                   "compressed NITF back out uncompressed.",
+        "tags": ["Remote Sensing", "NITF", "C++", "OpenCV", "Docker"],
+        "repo": "https://github.com/dennisfgardner/nitf_io",
+        "math": False,
+        "code": True,
+    },
+    {
         "slug": "2d-ipp-cfar",
         "title": "A 2D CFAR Detector with Intel IPP",
         "date": "August 18, 2026",

@@ -13,7 +13,7 @@ A static personal website for Dennis F. Gardner Jr., Ph.D. — a physicist/syste
 - `publications.html` — 19 peer-reviewed papers, 5 patents, 3 trade articles
 - `contact.html` — real contact info (email, phone, Vienna VA, Google Scholar)
 - `blog.html` — blog index: one card per post, linking to the post pages (generated)
-- `blog-<slug>.html` — one page per blog post, body converted from Markdown (generated; currently `blog-2d-ipp-cfar.html`)
+- `blog-<slug>.html` — one page per blog post, body converted from Markdown (generated; currently `blog-nitf-io.html` and `blog-2d-ipp-cfar.html`)
 - `posts/*.md` — **blog post bodies, authored in Markdown** (the real source; `blog_posts.py` holds only metadata)
 - `images/<slug>/` — figures for a given post, referenced from its Markdown by repo-root-relative path
 - `thesis.html` — Ph.D. thesis page: title/degree block + embedded PDF viewer + download button (generated; see below)
@@ -53,6 +53,10 @@ All styling lives in `styles.css`; the `render_*` functions emit only HTML and c
 
 `index.html` references `headshot_web.jpg`, which `generate_headshot()` regenerates from `headshot.jpeg` on every run (longest edge `HEADSHOT_MAX_PX` = 600 px, using macOS `sips` if present and ImageMagick `convert` otherwise). Drop in a new `headshot.jpeg` and rerun the generator. If the source photo or both tools are missing, the resize is skipped with a note and page generation still succeeds.
 
+Because it is rewritten on **every** run, the re-encode shows up as a binary diff even when
+the source photo has not changed — `git checkout headshot_web.jpg` if you did not mean to
+include it in a commit.
+
 ## Development
 
 Set up the build dependencies once:
@@ -72,6 +76,11 @@ python3 -m http.server 8080
 `venv/` is gitignored. Cloudflare never runs any of this — it serves the committed HTML
 directly — so remember to commit the regenerated pages along with the sources.
 
+A `venv/` can exist without the dependencies in it (it is gitignored, so it does not travel
+between machines). If `cv_to_html.py` dies with `ModuleNotFoundError: No module named
+'markdown'`, the fix is to rerun the `pip install -r requirements.txt` above, not to recreate
+the venv.
+
 ## Writing a blog post
 
 Post bodies are **Markdown in `posts/<slug>.md`**, converted to HTML at build time (not in
@@ -81,7 +90,14 @@ the browser), so pages stay crawlable and styled by `styles.css`.
    render twice. (markdownlint's MD041 will complain about this; ignore it.)
 2. Put figures in `images/<slug>/`, referenced as `images/<slug>/foo.png` — paths are
    relative to the repo root, where the generated HTML lives, not to the `.md`. Downscale
-   large ones: `convert big.jpg -resize 1200x -quality 82 images/<slug>/big.jpg`.
+   large ones to ~1200–1600 px wide. **ImageMagick is not installed on the Mac this site is
+   authored from**, so on macOS use `sips`; the `convert` form only works on the Linux box:
+
+   ```bash
+   sips -s format jpeg -s formatOptions 82 --resampleWidth 1600 big.png \
+       --out images/<slug>/big.jpg          # macOS
+   convert big.jpg -resize 1200x -quality 82 images/<slug>/big.jpg   # Linux
+   ```
 3. Add an entry to `POSTS` in `blog_posts.py`, newest first (there is no date sorting). Set
    `"code": True` for fenced code, `"math": True` for equations — these gate the per-page
    CDN tags, so a post that sets neither ships zero JS.
@@ -114,14 +130,20 @@ convert /home/dennis/repos/2D_ipp_CFAR/imgs/example_image.jpg \
     -resize 1200x -quality 82 images/2d-ipp-cfar/example_image.jpg
 ```
 
-## State and future work
+### Re-syncing the nitf-io post
 
-Everything the site shows is real content. Strategy 1 (thesis as a PDF) and Strategy 2
-(Markdown blog with KaTeX + Prism) from the original plan are both done.
+`posts/nitf-io.md` is likewise a copy of the README of `github.com/dennisfgardner/nitf_io`,
+edited the same way (H1 dropped, `-This repo`/`bacause`/`can be build` typos fixed, the
+`git submodule update` inline code un-wrapped, the image path rewritten with a caption
+added, the bare `./print_header`-style invocations promoted to ```bash fences, plus an
+opening paragraph on what NITF is and a closing repo link).
 
-- **KaTeX has never actually rendered anything** — the only post sets `"math": False`. Check
-  the first post with equations carefully in a browser.
-- Comments were deleted along with the placeholder posts; a static site cannot receive them.
-  If wanted, use giscus/utterances (GitHub-issue-backed), not hand-authored data.
-- No RSS feed, and no per-post `<meta name="description">` or Open Graph tags for link
-  previews — worth adding if the blog grows.
+The repo's `output0.png` is **15360x11264 and 34 MB** — never commit it as-is. Downscale it
+to `images/nitf-io/output0.jpg` first. ImageMagick is not installed on the Mac this site is
+authored from (the `convert` recipe above is Linux-only), so use macOS `sips`:
+
+```bash
+cp /Users/dennis/repos/nitf_io/readme.md posts/nitf-io.md   # then re-apply the edits above
+sips -s format jpeg -s formatOptions 82 --resampleWidth 1600 \
+    /Users/dennis/repos/nitf_io/output0.png --out images/nitf-io/output0.jpg
+```
