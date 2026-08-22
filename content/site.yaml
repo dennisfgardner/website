@@ -1,0 +1,42 @@
+# Site-wide content and configuration.
+#
+# Everything here is hand-edited (unlike content/cv.tex, which is the CV source).
+# The generator reads this file via generator/config.py: load_site().
+
+name: Dennis F. Gardner Jr., Ph.D.
+# Used as the '<page> – <short_name>' suffix in browser tab titles.
+short_name: Dennis F. Gardner Jr.
+footer_year: 2025
+
+# Publication and patent counts are COUNTED from the CV at build time; only the
+# numbers that cannot be derived live here.
+stats:
+  citations: 1,900+
+  h_index: 18
+
+# The Ph.D. thesis page. The CV has no thesis section, so this is authored here.
+thesis:
+  pdf: Gardner_thesis.pdf
+  title: Coherent Diﬀractive Imaging Near the Spatio-Temporal Limit with High-Harmonic Sources
+  degree: Doctor of Philosophy in Physics
+  institution: The University of Colorado at Boulder
+  date: December 2016
+  note: Received the APS Dissertation Prize in Laser Science
+  abstract: |
+    This thesis discusses methods for high-resolution static and stroboscopic microscopy using
+    tabletop coherent extreme ultraviolet (EUV) radiation from tabletop high-harmonic generation
+    (HHG) sources. These coherent short wavelength light sources are combined with a lensless,
+    computational, phase and amplitude-contrast technique called ptychographic Coherent Diﬀractive
+    Imaging (CDI). While ptychographic CDI techniques are currently widespread for visible, EUV and
+    X-ray microscopy, no previous work has been able to achieve at-wavelength resolution of extended
+    samples, especially in a reﬂection geometry, nor has previous work been able to image periodic
+    samples with high-ﬁdelity. In this work, a combination of experimental methods for high-numerical
+    aperture imaging and novel computational algorithms enabled the highest resolution-to-wavelength
+    demonstrations using any CDI technique. These algorithms include tilted plane correction, which
+    enables high-resolution imaging of surfaces in a reﬂection geometry, and a powerful technique
+    termed modulus enforced probe, which enables both imaging of periodic objects and convergence
+    of the ptychographic CDI algorithm in fewer iterations. Furthermore, the ultrafast pulse duration
+    of the high-harmonic radiation is harnessed to demonstrate proof-of-principle pump-probe
+    imaging of nanostructures, capturing thermal transport processes in nanostructures with an axial
+    resolution of 3 angstroms. Stroboscopic imaging with nanoscale resolution is a critical tool for the
+    investigation of nanoscale heat ﬂow and magnetic switching for the advancement of next generation

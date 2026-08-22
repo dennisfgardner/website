@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading and Writing NITF Files with NITRO and OpenCV – Dennis F. Gardner Jr.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2d3f2bbb">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-brand">Dennis F. Gardner Jr., Ph.D.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="publications.html">Publications</a>
+            <a href="blog.html" class="active">Blog</a>
+            <a href="thesis.html">Thesis</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+    <div class="container">
+        <a class="post-back" href="blog.html">&larr; Blog</a>
+
+        <article class="blog-post">
+            <div class="blog-header">
+                <h1>Reading and Writing NITF Files with NITRO and OpenCV</h1>
+                <span class="blog-date">August 22, 2026</span>
+            </div>
+
+            <div class="tags">
+                <span class="tag">Remote Sensing</span>
+                <span class="tag">NITF</span>
+                <span class="tag">C++</span>
+                <span class="tag">OpenCV</span>
+                <span class="tag">Docker</span>
+            </div>
+
+            <div class="blog-content">
+<p>The National Imagery Transmission Format (NITF) is the standard container for government and
+defense imagery. Unlike a PNG or a JPEG, a NITF file is a package: one or more image segments
+alongside graphic, text, and data extension segments carrying the metadata that makes the
+pixels useful — sensor, collection geometry, timestamps, and geolocation. That structure is
+exactly why you need a library to open one, and why the first thing most image processing
+workflows want is a way to get the pixels out and into OpenCV, numpy, PIL, or PyTorch.</p>
+<p>This repo shows examples of reading and writing NITF files.</p>
+<p>NITF input and output (IO) is done using the <a href="https://github.com/mdaus/nitro">NITRO library</a>.</p>
+<p>In one example, the NITF image data is written out to a *.png using the <a href="https://github.com/opencv/opencv">OpenCV library</a>. This is useful because the image data can then be processed using OpenCV, numpy, PIL, PyTorch, etc.</p>
+<p>All of the code discussed below lives in the <a href="https://github.com/dennisfgardner/nitf_io">nitf_io repository on GitHub</a>.</p>
+<p>NITRO and OpenCV libraries are included as submodules and are under their own licenses. After cloning the repo you can run <code>git submodule update --init --recursive</code> to get the submodules.</p>
+<h2>NITF Data</h2>
+<p>NITF data can be obtained from <a href="https://www.sdms.afrl.af.mil/index.php">Sensor Data Management Database</a>.
+Specifically, this code was tested on the <a href="https://www.sdms.afrl.af.mil/index.php?collection=wpafb2009">WPAFB 2009 dataset</a>.</p>
+<p>You&rsquo;ll need to create a free account to access the data.
+I used the <code>WPAFB-21Oct2009-TRAIN_NITF_003.zip (333 MB)</code> dataset to keep the file size reasonable.</p>
+<p>Here is the output of <em>0091021203201-01000605-VIS.ntf.r1</em> converted to a png using the <code>./write_images</code> program.</p>
+<figure><img alt="NITF to PNG Example" src="images/nitf-io/output0.jpg" />
+<figcaption>A wide-area frame from the WPAFB 2009 collection, converted from NITF to PNG by <code>write_images</code>. The original is 15360 x 11264 pixels; it has been downscaled here for the web. The black border and stair-stepped edges are the collection geometry — the imaged area sits rotated inside the rectangular image segment.</figcaption></figure>
+<h2>Docker Container</h2>
+<p>The examples in this repo can be built in a container.
+The Dockerfile will build NITRO and OpenCV.</p>
+<pre><code class="language-bash">docker build -t dennisfgardner/nitf_io:1.0 .
+</code></pre>
+<p>To build the code in this repo, mount the source and NITFs directories.</p>
+<pre><code class="language-bash">docker run -itv ./src:/home/nitf_io/src -v ./nitfs:/home/nitf_io/nitfs dennisfgardner/nitf_io:1.0 /bin/bash
+</code></pre>
+<p>The examples can be built using the following cmake command.</p>
+<pre><code class="language-bash">mkdir build
+cmake -S ./src -B ./build
+cmake --build ./build
+cd build
+</code></pre>
+<h2>Example #1 Print NITF Header Information</h2>
+<pre><code class="language-bash">./print_header &lt;nitf_filepath&gt;
+</code></pre>
+<h2>Example #2 Read Image Segment(s) and Write Out as PNG(s)</h2>
+<p>This is useful to visualize the image segment data.</p>
+<pre><code class="language-bash">./write_images &lt;nitf_filepath&gt;
+</code></pre>
+<p>This will write a file called <code>output0.png</code>.</p>
+<p>If you&rsquo;re working inside the container then you can copy the output image to the host (using another terminal) using the following command:</p>
+<pre><code class="language-bash">docker cp &lt;container_id_or_name&gt;:/path/to/file/inside/container /path/to/host/destination
+</code></pre>
+<h2>Example #3 Read In NITF and Write Out Same NITF</h2>
+<p>This is useful if the initial NITF is compressed and you&rsquo;d like an uncompressed version.</p>
+<pre><code class="language-bash">round_trip &lt;input_nitf_filepath&gt; &lt;output_nitf_filepath&gt;
+</code></pre>
+<h2>Memory Leak Checking</h2>
+<p>I used valgrind to check for memory leaks.</p>
+<pre><code class="language-bash">apt install valgrind
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./print_header &lt;input_nitf_filepath&gt;
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./write_images &lt;input_nitf_filepath&gt;
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./build/round_trip &lt;input_nitf_filepath&gt; &lt;output_nitf_filepath&gt;
+</code></pre>
+<h2>Future Work</h2>
+<ul>
+<li>ortho rectify the image</li>
+<li>overlay on map, like google earth</li>
+<li>do some AI/ML on the image to identify object and structures in the image</li>
+</ul>
+<p>The full source — the three example programs, the NITRO/OpenCV submodules, and the Dockerfile
+that builds them — is on GitHub at <a href="https://github.com/dennisfgardner/nitf_io">dennisfgardner/nitf_io</a>.</p>
+            </div>
+            <p class="post-source">Source code:
+                <a href="https://github.com/dennisfgardner/nitf_io" target="_blank" rel="noopener">https://github.com/dennisfgardner/nitf_io</a></p>
+        </article>
+    </div>
+    <footer>
+        <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"
+        data-autoloader-path="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/"></script>
+</body>
+</html>

@@ -1,11 +1,12 @@
-# Build-time dependencies for cv_to_html.py.
+# Build-time dependencies for build.py.
 #
 # Only needed to *regenerate* the site. Cloudflare serves the committed HTML
 # directly and never runs this, so these are local authoring tools only.
 #
 #   python3 -m venv venv
 #   venv/bin/pip install -r requirements.txt
-#   venv/bin/python cv_to_html.py
+#   venv/bin/python build.py
 
 markdown>=3.6
 pymdown-extensions>=10.0
+PyYAML>=6.0

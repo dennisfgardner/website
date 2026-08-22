@@ -1,3 +1,16 @@
+---
+title: A 2D CFAR Detector with Intel IPP
+date: 2026-08-18
+tags: [Signal Processing, C++, Intel IPP, OpenCV, Computer Vision]
+repo: https://github.com/dennisfgardner/2D_ipp_CFAR
+excerpt: >-
+  Finding small, bright clusters of pixels — stars, or man-made objects in
+  SAR imagery — against a non-uniform background where simple thresholding
+  fails. A 2D Constant False Alarm Rate detector in C++, built on Intel's
+  Integrated Performance Primitives and cross-checked against a Python
+  implementation.
+---
+
 Here we demonstrate a two-dimensional (2D), background Gaussian statistics, Constant False Alarm Rate (CFAR) detector using Intel's Integrated Performance Primitives (IPP).
 
 Two-dimensional CFAR detectors are useful when detecting relatively small and bright clusters of pixels in an image. Two possible examples include separating man-made objects (i.e. partially metallic objects with right-angles) in Synthetic Aperture Radar (SAR) images from natural background, or finding bright astronomical objects (i.e. stars) in an image with a non-uniform background where simple thresholding is insufficient.
