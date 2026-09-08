@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Marine Cadastre AIS Data for TrAISformer – Dennis F. Gardner Jr.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2d3f2bbb">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-brand">Dennis F. Gardner Jr., Ph.D.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="publications.html">Publications</a>
+            <a href="blog.html" class="active">Blog</a>
+            <a href="thesis.html">Thesis</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+    <div class="container">
+        <a class="post-back" href="blog.html">&larr; Blog</a>
+
+        <article class="blog-post">
+            <div class="blog-header">
+                <h1>Processing Marine Cadastre AIS Data for TrAISformer</h1>
+                <span class="blog-date">September 8, 2026</span>
+            </div>
+
+            <div class="tags">
+                <span class="tag">Machine Learning</span>
+                <span class="tag">Data Processing</span>
+                <span class="tag">Python</span>
+                <span class="tag">Maritime</span>
+            </div>
+
+            <div class="blog-content">
+<p>The Marine Cadastre publishes a year of Automatic Identification System (AIS) broadcast
+messages from every vessel required to carry a transponder — position, speed, and heading,
+reported every few seconds. This repo processes the 2023 data into the format used by
+<a href="https://github.com/CIA-Oceanix/TrAISformer">TrAISformer</a>, a transformer model for vessel
+trajectory prediction. I have a fork of
+<a href="https://github.com/dennisfgardner/coast_guard_AIS_data">TrAISformer</a> where I train it on this
+data.</p>
+<p>After the pipeline below runs, each record is <code>[lat, lon, sog, cog, unix_timestamp, mmsi]</code> —
+latitude, longitude, speed over ground, course over ground, a timestamp, and the vessel&rsquo;s MMSI
+identifier. This is the format used in the TrAISformer paper, so the processed data can be fed
+directly into the model. The default output location is <code>./output/mc_ais</code>, as pickle files.</p>
+<p>All of the code discussed below lives in the
+<a href="https://github.com/dennisfgardner/coast_guard_AIS_data">coast_guard_AIS_data repository on GitHub</a>.</p>
+<h2>Data Processing Pipeline</h2>
+<h3>Getting the Data</h3>
+<p>Edit the paths in <code>scripts/get_all_2023_broadcast_data.sh</code> to download all the data (you might
+need to make the script executable with <code>chmod +x</code>). The 365 days of 2023 data is about 111GB
+of compressed csv files; I downloaded it into a directory called <code>zips</code>.</p>
+<h3>Unzipping the Data</h3>
+<p>Unzip everything and move it into another directory:</p>
+<pre><code class="language-bash">ls zips/ | xargs -I {} unzip zips/{} -d unzips/
+</code></pre>
+<p>The unzipped data is about 303GB.</p>
+<p><em>Future work:</em> convert the data to parquet format to save on space.</p>
+<h3>Filter Out Invalid Data</h3>
+<pre><code class="language-bash">python ./filter_invalid_data.py
+</code></pre>
+<p>This removes bad data — unrealistic speeds (see <code>max_sog_kts</code> in <code>config.py</code>), MMSIs that
+aren&rsquo;t 9 digits, MMSIs that belong to aircraft, negative headings, and so on. Rows that pass
+validation are written to another csv file. Roughly 80-82% of the data is valid. Update the
+paths in the script for your system.</p>
+<h3>Select Region-of-Interest Data</h3>
+<p>The TrAISformer paper trained on a region of interest about 2.5 x 2.7 degrees in lat x lon;
+the same size is the default in <code>configs.py</code>. Unlike the paper, though, the default region
+here is centered on Washington, DC / Chesapeake Bay.</p>
+<pre><code class="language-bash">python ./select_roi_data.py
+</code></pre>
+<p>About 4-7% of the data falls within the default Washington DC / Chesapeake Bay region.</p>
+<h3>Create Tracks</h3>
+<p>Build vessel tracks from the broadcast messages:</p>
+<pre><code class="language-bash">./create_tracks.py
+</code></pre>
+<p>Optionally, plot the tracks afterward with <code>./plot_tracks.py</code>.</p>
+<figure><img alt="Vessel tracks near Washington, DC / Chesapeake Bay" src="images/coast-guard-ais-data/AIS_2023_09_08.jpg" />
+<figcaption>Vessel tracks reconstructed from a day of 2023 AIS broadcasts in the Washington, DC /
+Chesapeake Bay region of interest.</figcaption></figure>
+<h3>Split Data</h3>
+<pre><code class="language-bash">python ./split_tracks.py
+</code></pre>
+<p>Splits the tracks into train, eval, and test sets, ready for TrAISformer.</p>
+<p>The full source — the download script, the filtering and region-of-interest steps, track
+construction, and the train/eval/test split — is on GitHub at
+<a href="https://github.com/dennisfgardner/coast_guard_AIS_data">dennisfgardner/coast_guard_AIS_data</a>.</p>
+            </div>
+            <p class="post-source">Source code:
+                <a href="https://github.com/dennisfgardner/coast_guard_AIS_data" target="_blank" rel="noopener">https://github.com/dennisfgardner/coast_guard_AIS_data</a></p>
+        </article>
+    </div>
+    <footer>
+        <p>&copy; 2025 Dennis F. Gardner Jr., Ph.D.</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"
+        data-autoloader-path="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/"></script>
+</body>
+</html>
