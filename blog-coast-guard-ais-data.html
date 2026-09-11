@@ -39,6 +39,12 @@
             </div>
 
             <div class="blog-content">
+<blockquote>
+<p><strong>Updated September 11, 2026:</strong> <code>create_tracks.py</code> now splits each vessel&rsquo;s day into
+contiguous voyage segments before resampling and rejects any track that spans too much
+distance over land, removing tracks that previously appeared to sail straight over land — see
+&ldquo;Create Tracks&rdquo; below.</p>
+</blockquote>
 <p>The Marine Cadastre publishes a year of Automatic Identification System (AIS) broadcast
 messages from every vessel required to carry a transponder — position, speed, and heading,
 reported every few seconds. This repo processes the 2023 data into the format used by
@@ -53,6 +59,18 @@ directly into the model. The default output location is <code>./output/mc_ais</c
 <p>All of the code discussed below lives in the
 <a href="https://github.com/dennisfgardner/coast_guard_AIS_data">coast_guard_AIS_data repository on GitHub</a>.</p>
 <h2>Data Processing Pipeline</h2>
+<h3>Running the Whole Pipeline</h3>
+<p><code>scripts/process_all_data.sh</code> runs the processing stages end to end, with a progress bar per
+stage. It never touches <code>zips</code> or <code>unzips</code>, and asks before emptying any directory.</p>
+<pre><code class="language-bash">./scripts/process_all_data.sh            # rebuild tracks + splits
+./scripts/process_all_data.sh --full     # also rebuild filtered + rois (re-reads ~303 GB)
+./scripts/process_all_data.sh --plots    # also render the per-day PNGs
+</code></pre>
+<p>The default is tracks-only, which is all a change to the track-building code needs; use
+<code>--full</code> only when the row-level filters in <code>filter_invalid_data.py</code> have changed, since <code>rois</code>
+derives from <code>filtered</code> and the two must stay in sync. The stages can also be run one at a
+time, as below — every stage skips files whose output already exists, so an interrupted run
+resumes rather than starting over.</p>
 <h3>Getting the Data</h3>
 <p>Edit the paths in <code>scripts/get_all_2023_broadcast_data.sh</code> to download all the data (you might
 need to make the script executable with <code>chmod +x</code>). The 365 days of 2023 data is about 111GB
@@ -82,13 +100,45 @@ here is centered on Washington, DC / Chesapeake Bay.</p>
 <pre><code class="language-bash">./create_tracks.py
 </code></pre>
 <p>Optionally, plot the tracks afterward with <code>./plot_tracks.py</code>.</p>
+<p>A day of AIS broadcasts for one MMSI is <em>not</em> one track. The region-of-interest stage drops
+every message outside the box, so a vessel that leaves the region and comes back leaves a
+multi-hour hole in its day — resampling across that hole invents a straight line, which is how
+earlier plots had ships sailing over the Delmarva peninsula. <code>create_tracks.py</code> first cuts each
+vessel&rsquo;s day into contiguous voyage segments, splitting wherever:</p>
+<ul>
+<li>the time gap exceeds <code>max_gap_sec</code> (30 min) — the region-exit case above,</li>
+<li>the implied point-to-point speed exceeds <code>max_jump_kts</code> (40 kt) — MMSI collisions and spoofed
+  positions, which teleport even without a time gap,</li>
+<li>the vessel idles below <code>idle_sog_kts</code> (0.5 kt) for longer than <code>max_idle_sec</code> (1 h) — the
+  dwell itself is discarded, so moorings don&rsquo;t swamp the actual voyages.</li>
+</ul>
+<p>Each segment is then resampled onto a uniform 600 s grid (course over ground is interpolated on
+the unit circle, so a 350&deg; &rarr; 10&deg; turn goes through north rather than backwards
+through south), checked against a land mask, and cut into chunks of at most
+<code>max_resampled_points</code> (144 samples = 24 h). Chunks shorter than <code>min_resampled_points</code> (36,
+matching TrAISformer&rsquo;s own <code>min_seqlen</code>) are dropped — output tracks are therefore 36-144
+samples with every consecutive step exactly 600 s, matching the shape of the paper&rsquo;s <code>ct_dma</code>
+reference data.</p>
+<p>The land mask is a backstop behind segmentation rather than the primary defense — on a 7-day
+trial it rejected nothing that segmentation hadn&rsquo;t already removed. It&rsquo;s applied to the
+<em>resampled</em> track, never the raw points: at the ~1 km resolution of the grid, 56% of genuine
+receptions read as &ldquo;land&rdquo; because moored vessels sit at piers in Norfolk and Baltimore. A track
+is rejected only when it <em>spans</em> more than <code>land_run_nmi</code> overland in a straight line — span
+rather than distance traveled, because a vessel working a waterway too narrow for the grid to
+resolve otherwise accumulates land distance without bound: the Potomac water taxis at
+Washington, DC clock up 50 nmi doing laps in a river under 1 km wide.</p>
 <figure><img alt="Vessel tracks near Washington, DC / Chesapeake Bay" src="images/coast-guard-ais-data/AIS_2023_09_08.jpg" />
 <figcaption>Vessel tracks reconstructed from a day of 2023 AIS broadcasts in the Washington, DC /
-Chesapeake Bay region of interest.</figcaption></figure>
+Chesapeake Bay region of interest, after the segmentation and land-mask fixes above.</figcaption></figure>
 <h3>Split Data</h3>
 <pre><code class="language-bash">python ./split_tracks.py
 </code></pre>
-<p>Splits the tracks into train, eval, and test sets, ready for TrAISformer.</p>
+<p>Splits the tracks into train, eval, and test sets, ready for TrAISformer. The split is at <em>day</em>
+granularity — whole days are shuffled and assigned to train/valid/test, so a single vessel&rsquo;s day
+never straddles two splits. The shuffle is seeded (<code>Splits.seed</code> in <code>config.py</code>) and filenames
+are sorted first, so the same day always lands in the same split and two training runs are
+comparable; changing the seed reshuffles every day and invalidates any comparison against a
+previously trained model.</p>
 <p>The full source — the download script, the filtering and region-of-interest steps, track
 construction, and the train/eval/test split — is on GitHub at
 <a href="https://github.com/dennisfgardner/coast_guard_AIS_data">dennisfgardner/coast_guard_AIS_data</a>.</p>
